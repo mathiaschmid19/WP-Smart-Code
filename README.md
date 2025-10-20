@@ -12,7 +12,6 @@ A modern, secure WordPress plugin for managing and executing PHP, JavaScript, CS
 - ✅ **Admin Interface** — Modern React-based admin panel (in progress)
 - ✅ **Conditional Execution** — Run snippets based on page/post/user rules
 - ✅ **Import/Export** — Backup and migrate snippets as JSON
-- ✅ **Gutenberg Block** — Insert snippets directly in posts
 - ✅ **WordPress Standards** — Follows all WordPress best practices
 
 ## 🚀 Quick Start
@@ -82,17 +81,6 @@ edge-code-snippets/
 - [x] Prepared statement security
 - [x] Singleton pattern architecture
 
-### 📅 In Development (Steps 3-10)
-
-- [ ] Admin menu & settings page (Step 3)
-- [ ] Code execution system (Step 4)
-- [ ] REST API endpoints (Step 5)
-- [ ] Conditional loader (Step 6)
-- [ ] React admin interface with CodeMirror (Step 7)
-- [ ] Import/export functionality (Step 8)
-- [ ] Gutenberg block & shortcode (Step 9)
-- [ ] Security hardening & internationalization (Step 10)
-
 ## 🗄️ Database Schema
 
 ```sql
@@ -131,25 +119,12 @@ CREATE TABLE wp_ecs_snippets (
 - **PHP:** 7.4 or higher
 - **MySQL/MariaDB:** 5.7+
 
-## 📖 Testing
-
-See `TESTING-STEP-2.md` for comprehensive CRUD testing examples.
-
 To verify database creation:
 
 ```php
 $db = \ECS\Plugin::instance()->get_db();
 echo $db->table_exists() ? '✅ Table created' : '❌ Table missing';
 ```
-
-## 🤝 Contributing
-
-Development follows the step-by-step roadmap in `instructions.md`. Each step includes:
-
-1. Implementation of new features
-2. Code review checkpoint
-3. Testing verification
-4. Documentation updates
 
 ## 📝 Standards
 
@@ -175,14 +150,3 @@ See LICENSE file for details.
 ## 👤 Author
 
 Built with ❤️ for the WordPress community
-
----
-
-**Status:** 2/10 Steps Complete ✅ | Next: Admin Menu & Settings Page
-
-For detailed information on each step, see:
-
-- `STEP-2-SUMMARY.md` — Database & CRUD overview
-- `PROJECT-STRUCTURE.md` — Architecture and roadmap
-- `TESTING-STEP-2.md` — Testing guide
-- `instructions.md` — Original step-by-step plan
