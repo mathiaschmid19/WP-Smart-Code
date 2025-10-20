@@ -267,9 +267,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="ecs-loading-spinner">
 		<span class="spinner is-active"></span>
 	</div>
-</div>
-
-<script>
+</div><script>
 jQuery(document).ready(function($) {
 	// Handle toggle switch changes
 	$('.ecs-toggle-input').on('change', function() {
@@ -319,3 +317,5 @@ jQuery(document).ready(function($) {
 
 });
 </script>
+
+

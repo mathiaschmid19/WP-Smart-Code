@@ -4368,7 +4368,7 @@ body.wp-admin #wpfooter {
 
 /* Tab Content */
 .ecs-tab-content {
-	display: none;
+	display: block; /* Show content by default for Tools page */
 }
 
 .ecs-tab-content.ecs-tab-active {

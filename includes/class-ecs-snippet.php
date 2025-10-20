@@ -304,6 +304,10 @@ class Snippet {
 	 *   type?: string,
 	 *   active?: bool,
 	 *   author_id?: int,
+	 *   deleted?: bool,
+	 *   search?: string,
+	 *   orderby?: string,
+	 *   order?: string,
 	 *   limit?: int,
 	 *   offset?: int
 	 * } $args Query arguments.
@@ -315,8 +319,24 @@ class Snippet {
 
 		$table = $this->db->get_table_name();
 
+		// Apply filter hook for query arguments.
+		$args = apply_filters( 'ecs_snippets_query_args', $args, 'all' );
+
 		$limit = $args['limit'] ?? 50;
 		$offset = $args['offset'] ?? 0;
+		$orderby = $args['orderby'] ?? 'created_at';
+		$order = strtoupper( $args['order'] ?? 'DESC' );
+
+		// Validate order direction.
+		if ( ! in_array( $order, [ 'ASC', 'DESC' ], true ) ) {
+			$order = 'DESC';
+		}
+
+		// Validate orderby column.
+		$allowed_orderby = [ 'id', 'title', 'slug', 'type', 'active', 'mode', 'created_at', 'updated_at' ];
+		if ( ! in_array( $orderby, $allowed_orderby, true ) ) {
+			$orderby = 'created_at';
+		}
 
 		$where = [];
 		$where_args = [];
@@ -336,14 +356,30 @@ class Snippet {
 			$where_args[] = $args['author_id'];
 		}
 
-		if ( isset( $args['deleted'] ) ) {
+		// Handle deleted filter only if column exists.
+		if ( isset( $args['deleted'] ) && $this->has_deleted_column() ) {
 			$where[] = 'deleted = %d';
 			$where_args[] = $args['deleted'] ? 1 : 0;
 		}
 
+		// Handle search functionality.
+		if ( ! empty( $args['search'] ) ) {
+			$search_fields = apply_filters( 'ecs_snippets_search_fields', [ 'title', 'slug' ] );
+			$search_conditions = [];
+
+			foreach ( $search_fields as $field ) {
+				$search_conditions[] = "{$field} LIKE %s";
+				$where_args[] = '%' . $wpdb->esc_like( $args['search'] ) . '%';
+			}
+
+			if ( ! empty( $search_conditions ) ) {
+				$where[] = '(' . implode( ' OR ', $search_conditions ) . ')';
+			}
+		}
+
 		$where_clause = ! empty( $where ) ? 'WHERE ' . implode( ' AND ', $where ) : '';
 
-		$query = "SELECT * FROM {$table} {$where_clause} ORDER BY created_at DESC LIMIT %d OFFSET %d";
+		$query = "SELECT * FROM {$table} {$where_clause} ORDER BY {$orderby} {$order} LIMIT %d OFFSET %d"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		$where_args[] = $limit;
 		$where_args[] = $offset;
@@ -363,7 +399,9 @@ class Snippet {
 	 * @param array{
 	 *   type?: string,
 	 *   active?: bool,
-	 *   author_id?: int
+	 *   author_id?: int,
+	 *   deleted?: bool,
+	 *   search?: string
 	 * } $args Query arguments.
 	 *
 	 * @return int Total count of snippets.
@@ -372,6 +410,9 @@ class Snippet {
 		global $wpdb;
 
 		$table = $this->db->get_table_name();
+
+		// Apply filter hook for query arguments.
+		$args = apply_filters( 'ecs_snippets_query_args', $args, 'count' );
 
 		$where = [];
 		$where_args = [];
@@ -391,14 +432,30 @@ class Snippet {
 			$where_args[] = $args['author_id'];
 		}
 
-		if ( isset( $args['deleted'] ) ) {
+		// Handle deleted filter only if column exists.
+		if ( isset( $args['deleted'] ) && $this->has_deleted_column() ) {
 			$where[] = 'deleted = %d';
 			$where_args[] = $args['deleted'] ? 1 : 0;
 		}
 
+		// Handle search functionality.
+		if ( ! empty( $args['search'] ) ) {
+			$search_fields = apply_filters( 'ecs_snippets_search_fields', [ 'title', 'slug' ] );
+			$search_conditions = [];
+
+			foreach ( $search_fields as $field ) {
+				$search_conditions[] = "{$field} LIKE %s";
+				$where_args[] = '%' . $wpdb->esc_like( $args['search'] ) . '%';
+			}
+
+			if ( ! empty( $search_conditions ) ) {
+				$where[] = '(' . implode( ' OR ', $search_conditions ) . ')';
+			}
+		}
+
 		$where_clause = ! empty( $where ) ? 'WHERE ' . implode( ' AND ', $where ) : '';
 
-		$query = "SELECT COUNT(*) as total FROM {$table} {$where_clause}";
+		$query = "SELECT COUNT(*) as total FROM {$table} {$where_clause}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		if ( ! empty( $where_args ) ) {
@@ -406,9 +463,124 @@ class Snippet {
 				$wpdb->prepare( $query, ...$where_args ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			);
 		} else {
-			$result = $wpdb->get_var( $query );
+			$result = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		return (int) $result;
+	}
+
+	/**
+	 * Soft delete a snippet (move to trash).
+	 *
+	 * @param int $id Snippet ID.
+	 * @return bool True on success, false on failure.
+	 */
+	public function soft_delete( int $id ): bool {
+		global $wpdb;
+
+		// Check if deleted column exists.
+		if ( ! $this->has_deleted_column() ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( '[ECS] Cannot soft delete: deleted column does not exist' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+			return false;
+		}
+
+		$table = $this->db->get_table_name();
+
+		$update_data = [
+			'deleted'    => 1,
+			'updated_at' => current_time( 'mysql' ),
+		];
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$result = $wpdb->update(
+			$table,
+			$update_data,
+			[ 'id' => $id ],
+			[ '%d', '%s' ],
+			[ '%d' ]
+		);
+
+		if ( $result ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( "[ECS] Snippet soft deleted: {$id}" ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+			return true;
+		}
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( '[ECS] Failed to soft delete snippet: ' . $wpdb->last_error ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		}
+		return false;
+	}
+
+	/**
+	 * Restore a snippet from trash.
+	 *
+	 * @param int $id Snippet ID.
+	 * @return bool True on success, false on failure.
+	 */
+	public function restore( int $id ): bool {
+		global $wpdb;
+
+		// Check if deleted column exists.
+		if ( ! $this->has_deleted_column() ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( '[ECS] Cannot restore: deleted column does not exist' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+			return false;
+		}
+
+		$table = $this->db->get_table_name();
+
+		$update_data = [
+			'deleted'    => 0,
+			'updated_at' => current_time( 'mysql' ),
+		];
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$result = $wpdb->update(
+			$table,
+			$update_data,
+			[ 'id' => $id ],
+			[ '%d', '%s' ],
+			[ '%d' ]
+		);
+
+		if ( $result ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( "[ECS] Snippet restored: {$id}" ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+			return true;
+		}
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( '[ECS] Failed to restore snippet: ' . $wpdb->last_error ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the deleted column exists in the database table.
+	 *
+	 * @return bool True if column exists, false otherwise.
+	 */
+	private function has_deleted_column(): bool {
+		global $wpdb;
+
+		$table = $this->db->get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$column = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND COLUMN_NAME = %s',
+				DB_NAME,
+				$table,
+				'deleted'
+			)
+		);
+
+		return ! empty( $column );
 	}
 }
