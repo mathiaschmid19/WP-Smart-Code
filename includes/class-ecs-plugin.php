@@ -326,6 +326,7 @@ class Plugin {
 		// Create admin instance if not exists
 		if ( ! $this->admin ) {
 			$this->admin = new Admin( $this->snippet );
+			$this->admin->init(); // Initialize admin hooks (AJAX, etc.)
 		}
 
 		// Register the menu directly as a top-level menu

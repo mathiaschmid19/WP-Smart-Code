@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<form method="get">
-		<input type="hidden" name="page" value="wp-smart-code">
+		<input type="hidden" name="page" value="code-snippet">
 		<?php
 		if ( isset( $list_table ) && is_object( $list_table ) ) {
 			$list_table->views();

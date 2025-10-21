@@ -43,8 +43,9 @@ class Admin {
 			return;
 		}
 
+		// Note: Menu registration is handled by Plugin class
 		// Register admin menu on admin_menu hook.
-		add_action( 'admin_menu', [ $this, 'register_menu' ] );
+		// add_action( 'admin_menu', [ $this, 'register_menu' ] );
 
 		// Enqueue admin assets.
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
@@ -245,9 +246,9 @@ class Admin {
 	public function enqueue_assets( string $hook ): void {
 		// Only load on our plugin pages.
 		$allowed_pages = [
-			'tools_page_wp-smart-code',
-			'tools_page_wp-smart-code-editor',
-			'tools_page_wp-smart-code-tools',
+			'toplevel_page_code-snippet',
+			'smart-code_page_wp-smart-code-editor',
+			'smart-code_page_wp-smart-code-tools',
 		];
 		
 		if ( ! in_array( $hook, $allowed_pages, true ) ) {

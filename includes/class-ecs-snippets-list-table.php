@@ -268,7 +268,7 @@ class Snippets_List_Table extends \WP_List_Table {
 			$actions['restore'] = sprintf(
 				'<a href="%s">%s</a>',
 				wp_nonce_url(
-					admin_url( 'admin.php?page=wp-smart-code&action=restore&id=' . $snippet_id ),
+					admin_url( 'admin.php?page=code-snippet&action=restore&id=' . $snippet_id ),
 					'restore_snippet_' . $snippet_id
 				),
 				__( 'Restore', 'code-snippet' )
@@ -276,7 +276,7 @@ class Snippets_List_Table extends \WP_List_Table {
 			$actions['delete'] = sprintf(
 				'<a href="%s" class="delete">%s</a>',
 				wp_nonce_url(
-					admin_url( 'admin.php?page=wp-smart-code&action=delete&id=' . $snippet_id ),
+					admin_url( 'admin.php?page=code-snippet&action=delete&id=' . $snippet_id ),
 					'delete_snippet_' . $snippet_id
 				),
 				__( 'Delete Permanently', 'code-snippet' )
@@ -295,7 +295,7 @@ class Snippets_List_Table extends \WP_List_Table {
 			$actions['toggle'] = sprintf(
 				'<a href="%s">%s</a>',
 				wp_nonce_url(
-					admin_url( 'admin.php?page=wp-smart-code&action=toggle&id=' . $snippet_id ),
+					admin_url( 'admin.php?page=code-snippet&action=toggle&id=' . $snippet_id ),
 					'toggle_snippet_' . $snippet_id
 				),
 				$toggle_text
@@ -304,7 +304,7 @@ class Snippets_List_Table extends \WP_List_Table {
 			$actions['trash'] = sprintf(
 				'<a href="%s" class="delete">%s</a>',
 				wp_nonce_url(
-					admin_url( 'admin.php?page=wp-smart-code&action=trash&id=' . $snippet_id ),
+					admin_url( 'admin.php?page=code-snippet&action=trash&id=' . $snippet_id ),
 					'trash_snippet_' . $snippet_id
 				),
 				__( 'Trash', 'code-snippet' )
@@ -513,7 +513,7 @@ class Snippets_List_Table extends \WP_List_Table {
 		$class = ( $current === 'all' ) ? ' class="current"' : '';
 		$views['all'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-			admin_url( 'admin.php?page=wp-smart-code' . $type_filter ),
+			admin_url( 'admin.php?page=code-snippet' . $type_filter ),
 			$class,
 			__( 'All', 'code-snippet' ),
 			$all_count
@@ -523,7 +523,7 @@ class Snippets_List_Table extends \WP_List_Table {
 		$class = ( $current === 'active' ) ? ' class="current"' : '';
 		$views['active'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-			admin_url( 'admin.php?page=wp-smart-code&view=active' . $type_filter ),
+			admin_url( 'admin.php?page=code-snippet&view=active' . $type_filter ),
 			$class,
 			__( 'Active', 'code-snippet' ),
 			$active_count
@@ -533,7 +533,7 @@ class Snippets_List_Table extends \WP_List_Table {
 		$class = ( $current === 'inactive' ) ? ' class="current"' : '';
 		$views['inactive'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-			admin_url( 'admin.php?page=wp-smart-code&view=inactive' . $type_filter ),
+			admin_url( 'admin.php?page=code-snippet&view=inactive' . $type_filter ),
 			$class,
 			__( 'Inactive', 'code-snippet' ),
 			$inactive_count
@@ -543,7 +543,7 @@ class Snippets_List_Table extends \WP_List_Table {
 		$class = ( $current === 'trash' ) ? ' class="current"' : '';
 		$views['trash'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-			admin_url( 'admin.php?page=wp-smart-code&view=trash' . $type_filter ),
+			admin_url( 'admin.php?page=code-snippet&view=trash' . $type_filter ),
 			$class,
 			__( 'Trash', 'code-snippet' ),
 			$trash_count

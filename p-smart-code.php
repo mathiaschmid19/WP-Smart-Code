@@ -52,7 +52,32 @@ add_action(
 	}
 );
 
-// Note: Fallback menu registration removed - the class-based approach works correctly now
+// Add plugin action links
+add_filter( 'plugin_action_links_' . ECS_BASENAME, 'ecs_add_plugin_action_links' );
+
+/**
+ * Add custom action links to the plugin list page.
+ *
+ * @param array $links Existing plugin action links.
+ * @return array Modified plugin action links.
+ */
+function ecs_add_plugin_action_links( array $links ): array {
+	$custom_links = [
+		'snippets' => sprintf(
+			'<a href="%s">%s</a>',
+			admin_url( 'admin.php?page=code-snippet' ),
+			__( 'Snippets List', 'code-snippet' )
+		),
+		'add_new' => sprintf(
+			'<a href="%s">%s</a>',
+			admin_url( 'admin.php?page=wp-smart-code-editor' ),
+			__( 'Add New', 'code-snippet' )
+		),
+	];
+
+	// Merge custom links with existing links (Settings, Deactivate, etc.)
+	return array_merge( $custom_links, $links );
+}
 
 /**
  * Activation hook.
