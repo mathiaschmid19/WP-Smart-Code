@@ -121,6 +121,9 @@ class Plugin {
 		// Initialize sandbox for safe snippet execution.
 		$this->initialize_sandbox();
 
+		// Handle single-item actions early, before any output
+		add_action( 'admin_init', [ $this, 'handle_single_actions' ] );
+
 		// Register admin interface directly.
 		add_action( 'admin_menu', [ $this, 'initialize_admin_menu' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'initialize_admin_assets' ] );
@@ -512,6 +515,108 @@ class Plugin {
 	}
 
 	/**
+	 * Handle single-item actions (toggle, trash, restore, delete).
+	 *
+	 * @return void
+	 */
+	public function handle_single_actions(): void {
+		// Only run on our plugin page
+		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'edge-code-snippets' ) {
+			return;
+		}
+
+		// Check if action and ID are set
+		if ( ! isset( $_GET['action'] ) || ! isset( $_GET['id'] ) ) {
+			return;
+		}
+
+		$action = sanitize_text_field( wp_unslash( $_GET['action'] ) );
+		$id = absint( $_GET['id'] );
+		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+
+		// Verify user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'edge-code-snippets' ) );
+		}
+
+		// Verify nonce
+		if ( ! wp_verify_nonce( $nonce, $action . '_snippet_' . $id ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'edge-code-snippets' ) );
+		}
+
+		// Validate action
+		$allowed_actions = [ 'toggle', 'trash', 'restore', 'delete' ];
+		if ( ! in_array( $action, $allowed_actions, true ) ) {
+			wp_die( esc_html__( 'Invalid action.', 'edge-code-snippets' ) );
+		}
+
+		// Verify snippet exists
+		$snippet = $this->snippet->get( $id );
+		if ( ! $snippet ) {
+			add_settings_error( 'ecs_messages', 'ecs_message', __( 'Snippet not found.', 'edge-code-snippets' ), 'error' );
+			wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets' ) );
+			exit;
+		}
+
+		// Process the action
+		$result = false;
+		$message = '';
+		
+		// Preserve current view if set
+		$current_view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : '';
+		$redirect_url = admin_url( 'admin.php?page=edge-code-snippets' );
+
+		switch ( $action ) {
+			case 'toggle':
+				$new_status = $snippet['active'] ? 0 : 1;
+				$result = $this->snippet->update( $id, [ 'active' => $new_status ] );
+				if ( $result !== false ) {
+					$status_text = $new_status ? __( 'activated', 'edge-code-snippets' ) : __( 'deactivated', 'edge-code-snippets' );
+					$message = sprintf( __( 'Snippet %s successfully.', 'edge-code-snippets' ), $status_text );
+				} else {
+					$message = __( 'Failed to update snippet status.', 'edge-code-snippets' );
+				}
+				// Preserve current view
+				if ( $current_view ) {
+					$redirect_url = add_query_arg( 'view', $current_view, $redirect_url );
+				}
+				break;
+
+			case 'trash':
+				$result = $this->snippet->soft_delete( $id );
+				$message = $result ? __( 'Snippet moved to trash.', 'edge-code-snippets' ) : __( 'Failed to move snippet to trash.', 'edge-code-snippets' );
+				// Preserve current view
+				if ( $current_view ) {
+					$redirect_url = add_query_arg( 'view', $current_view, $redirect_url );
+				}
+				break;
+
+			case 'restore':
+				$result = $this->snippet->restore( $id );
+				$message = $result ? __( 'Snippet restored successfully.', 'edge-code-snippets' ) : __( 'Failed to restore snippet.', 'edge-code-snippets' );
+				$redirect_url = add_query_arg( 'view', 'trash', $redirect_url );
+				break;
+
+			case 'delete':
+				$result = $this->snippet->delete( $id );
+				$message = $result ? __( 'Snippet deleted permanently.', 'edge-code-snippets' ) : __( 'Failed to delete snippet.', 'edge-code-snippets' );
+				$redirect_url = add_query_arg( 'view', 'trash', $redirect_url );
+				break;
+		}
+
+		// Store message in transient for display after redirect
+		$notice_type = $result ? 'success' : 'error';
+		set_transient( 'ecs_admin_notice', [
+			'message' => $message,
+			'type' => $notice_type
+		], 30 );
+
+		// Redirect (this removes action and id parameters)
+		wp_safe_redirect( $redirect_url );
+		exit;
+	}
+
+	/**
 	 * Render admin page.
 	 *
 	 * @return void
@@ -526,9 +631,21 @@ class Plugin {
 			wp_die( esc_html__( 'Plugin not properly initialized.', 'edge-code-snippets' ) );
 		}
 
-		// Get all snippets
-		$snippets = $this->snippet->all( [ 'limit' => 100 ] );
-		$total_count = $this->snippet->count();
+		// Display transient admin notice if exists
+		$notice = get_transient( 'ecs_admin_notice' );
+		if ( $notice ) {
+			delete_transient( 'ecs_admin_notice' );
+			add_settings_error( 'ecs_messages', 'ecs_message', $notice['message'], $notice['type'] );
+		}
+
+		// Ensure list table class is loaded
+		if ( ! class_exists( 'ECS\Snippets_List_Table' ) ) {
+			require_once ECS_DIR . 'includes/class-ecs-snippets-list-table.php';
+		}
+
+		// Create list table instance
+		$list_table = new Snippets_List_Table( $this->snippet );
+		$list_table->prepare_items();
 
 		// Make admin instance available in template
 		$admin = $this->admin;

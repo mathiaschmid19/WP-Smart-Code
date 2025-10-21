@@ -45,7 +45,35 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 
 	<!-- Main Content Area -->
 	<div class="ecs-editor-content">
-		<form id="ecs-snippet-editor-form" method="post">
+		<?php
+		// Display success message
+		if ( isset( $_GET['message'] ) ) {
+			$message_type = sanitize_text_field( wp_unslash( $_GET['message'] ) );
+			$message_text = '';
+			
+			switch ( $message_type ) {
+				case 'updated':
+					$message_text = __( 'Snippet updated successfully.', 'edge-code-snippets' );
+					break;
+				case 'created':
+					$message_text = __( 'Snippet created successfully.', 'edge-code-snippets' );
+					break;
+			}
+			
+			if ( ! empty( $message_text ) ) {
+				?>
+				<div class="notice notice-success is-dismissible ecs-editor-notice">
+					<p><?php echo esc_html( $message_text ); ?></p>
+					<button type="button" class="notice-dismiss">
+						<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'edge-code-snippets' ); ?></span>
+					</button>
+				</div>
+				<?php
+			}
+		}
+		?>
+		
+		<form id="ecs-snippet-editor-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<?php wp_nonce_field( 'ecs_save_snippet', 'ecs_snippet_nonce' ); ?>
 			<input type="hidden" name="action" value="ecs_save_snippet">
 			<input type="hidden" name="snippet_id" value="<?php echo esc_attr( $snippet_id ); ?>">

@@ -282,6 +282,74 @@
 
       // Test snippet
       $(".ecs-test-snippet").on("click", this.testSnippet.bind(this));
+
+      // Initialize editor resize handle
+      this.initEditorResize();
+    },
+
+    /**
+     * Initialize editor resize functionality
+     */
+    initEditorResize: function () {
+      const self = this;
+      let isResizing = false;
+      let startY = 0;
+      let startHeight = 0;
+      let editorElement = null;
+
+      // Create resize handle if it doesn't exist
+      const wrapper = $(".ecs-code-editor-wrapper");
+      if (wrapper.length && !wrapper.find(".ecs-editor-resize-handle").length) {
+        const resizeHandle = $('<div class="ecs-editor-resize-handle"></div>');
+        wrapper.append(resizeHandle);
+
+        // Get the CodeMirror element or textarea
+        editorElement = wrapper.find(".CodeMirror").length
+          ? wrapper.find(".CodeMirror")[0]
+          : wrapper.find(".ecs-code-editor")[0];
+
+        // Mouse down on resize handle
+        resizeHandle.on("mousedown", function (e) {
+          e.preventDefault();
+          isResizing = true;
+          startY = e.clientY;
+          startHeight = $(editorElement).height();
+
+          // Add resizing class for visual feedback
+          $("body").addClass("ecs-resizing-editor");
+          wrapper.addClass("ecs-resizing");
+
+          // Prevent text selection during resize
+          $("body").css("user-select", "none");
+        });
+
+        // Mouse move - resize editor
+        $(document).on("mousemove", function (e) {
+          if (!isResizing) return;
+
+          const deltaY = e.clientY - startY;
+          const newHeight = Math.max(200, startHeight + deltaY); // Minimum height of 200px
+
+          // Update editor height
+          $(editorElement).height(newHeight);
+
+          // Refresh CodeMirror if it exists
+          if (self.codeMirror && self.codeMirror.codemirror) {
+            self.codeMirror.codemirror.setSize(null, newHeight);
+            self.codeMirror.codemirror.refresh();
+          }
+        });
+
+        // Mouse up - stop resizing
+        $(document).on("mouseup", function () {
+          if (isResizing) {
+            isResizing = false;
+            $("body").removeClass("ecs-resizing-editor");
+            wrapper.removeClass("ecs-resizing");
+            $("body").css("user-select", "");
+          }
+        });
+      }
     },
 
     /**

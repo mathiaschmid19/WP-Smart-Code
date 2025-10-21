@@ -593,15 +593,14 @@ class Sandbox
         // Decode HTML entities that might have been encoded during storage
         $code = html_entity_decode($code, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         
-        // Sanitize code first
-        $sanitized_code = $this->sanitize_php_code($code);
-        if (empty($sanitized_code)) {
-            return;
-        }
-
-        // Validate PHP syntax
-        $syntax_check = $this->validate_php_syntax($sanitized_code);
-        if (!$syntax_check['valid']) {
+        // Remove PHP tags if present
+        $code = preg_replace('/^<\?php\s*/i', '', $code);
+        $code = preg_replace('/\s*\?>$/', '', $code);
+        
+        // Trim the code
+        $code = trim($code);
+        
+        if (empty($code)) {
             return;
         }
 
@@ -612,18 +611,21 @@ class Sandbox
             
             // Execute the code using eval
             // Note: eval doesn't need <?php tags
-            eval($sanitized_code);
+            eval($code);
             
             // Restore error handler
             restore_error_handler();
             
             // PHP snippet executed successfully
             
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             // Restore error handler
             restore_error_handler();
             
-            // Handle execution error silently
+            // Log error in debug mode
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('[ECS] PHP execution error: ' . $e->getMessage()); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            }
         }
     }
 

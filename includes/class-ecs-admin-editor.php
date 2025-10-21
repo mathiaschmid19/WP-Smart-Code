@@ -140,11 +140,13 @@ class AdminEditor {
 			if ( ! $result ) {
 				wp_die( esc_html__( 'Failed to update snippet.', 'edge-code-snippets' ) );
 			}
+			
+			// Stay on the same page with success message
 			$redirect_url = add_query_arg(
 				[
-					'page'    => 'ecs-editor',
-					'id'      => $snippet_id,
-					'message' => 'updated',
+					'page'       => 'edge-code-snippets-editor',
+					'snippet_id' => $snippet_id,
+					'message'    => 'updated',
 				],
 				admin_url( 'admin.php' )
 			);
@@ -154,11 +156,13 @@ class AdminEditor {
 			if ( ! $new_id ) {
 				wp_die( esc_html__( 'Failed to create snippet.', 'edge-code-snippets' ) );
 			}
+			
+			// Redirect to edit the newly created snippet
 			$redirect_url = add_query_arg(
 				[
-					'page'    => 'ecs-editor',
-					'id'      => $new_id,
-					'message' => 'created',
+					'page'       => 'edge-code-snippets-editor',
+					'snippet_id' => $new_id,
+					'message'    => 'created',
 				],
 				admin_url( 'admin.php' )
 			);
