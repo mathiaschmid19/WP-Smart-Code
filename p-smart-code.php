@@ -1,14 +1,14 @@
 <?php
 /**
  * Plugin Name: WP Smart Code
- * Plugin URI: #
+ * Plugin URI: https://github.com/mathiaschmid19/WP-Smart-Code
  * Description: Safely manage and execute PHP, JavaScript, CSS, and HTML code snippets in WordPress.
  * Version: 1.0.1
  * Author: Amin Ouhan
- * Author URI: https://ouhan.com
+ * Author URI: https://amineouhannou.com
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: wp-smart-code
+ * Text Domain: code-snippet
  * Domain Path: /languages
  * Requires at least: 5.9
  * Requires PHP: 7.4
@@ -77,8 +77,8 @@ function ecs_activate(): void {
 		// Deactivate the plugin
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		wp_die( 
-			esc_html__( 'Plugin activation failed. Please check the error logs for more details.', 'edge-code-snippets' ),
-			esc_html__( 'Plugin Activation Error', 'edge-code-snippets' ),
+			esc_html__( 'Plugin activation failed. Please check the error logs for more details.', 'code-snippet' ),
+			esc_html__( 'Plugin Activation Error', 'code-snippet' ),
 			[ 'back_link' => true ]
 		);
 	}

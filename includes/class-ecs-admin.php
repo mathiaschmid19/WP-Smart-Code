@@ -68,10 +68,10 @@ class Admin {
 	public function register_menu(): void {
 		$page_hook = add_submenu_page(
 			'tools.php',
-			__( 'Edge Code Snippets', 'edge-code-snippets' ),
-			__( 'Edge Code', 'edge-code-snippets' ),
+			__( 'Edge Code Snippets', 'code-snippet' ),
+			__( 'Edge Code', 'code-snippet' ),
 			'manage_options',
-			'edge-code-snippets',
+			'code-snippet',
 			[ $this, 'render_page' ]
 		);
 
@@ -91,7 +91,7 @@ class Admin {
 	public function add_screen_options(): void {
 		$option = 'per_page';
 		$args   = [
-			'label'   => __( 'Snippets per page', 'edge-code-snippets' ),
+			'label'   => __( 'Snippets per page', 'code-snippet' ),
 			'default' => 20,
 			'option'  => 'snippets_per_page',
 		];
@@ -122,7 +122,7 @@ class Admin {
 	public function render_page(): void {
 		// Check user capabilities.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'code-snippet' ) );
 		}
 
 		// Handle actions
@@ -245,9 +245,9 @@ class Admin {
 	public function enqueue_assets( string $hook ): void {
 		// Only load on our plugin pages.
 		$allowed_pages = [
-			'tools_page_edge-code-snippets',
-			'tools_page_edge-code-snippets-editor',
-			'tools_page_edge-code-snippets-tools',
+			'tools_page_wp-smart-code',
+			'tools_page_wp-smart-code-editor',
+			'tools_page_wp-smart-code-tools',
 		];
 		
 		if ( ! in_array( $hook, $allowed_pages, true ) ) {
@@ -289,9 +289,9 @@ class Admin {
 				'nonce'    => wp_create_nonce( 'ecs-admin-nonce' ),
 				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 				'i18n'     => [
-					'confirmDelete' => __( 'Are you sure you want to delete this snippet?', 'edge-code-snippets' ),
-					'loading'       => __( 'Loading...', 'edge-code-snippets' ),
-					'error'         => __( 'An error occurred.', 'edge-code-snippets' ),
+					'confirmDelete' => __( 'Are you sure you want to delete this snippet?', 'code-snippet' ),
+					'loading'       => __( 'Loading...', 'code-snippet' ),
+					'error'         => __( 'An error occurred.', 'code-snippet' ),
 				],
 			]
 		);
@@ -304,16 +304,16 @@ class Admin {
 				'nonce'    => wp_create_nonce( 'ecs-admin-nonce' ),
 				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 				'i18n'     => [
-					'confirmDelete'     => __( 'Are you sure you want to delete this snippet?', 'edge-code-snippets' ),
-					'confirmTrash'      => __( 'Are you sure you want to move this snippet to trash?', 'edge-code-snippets' ),
-					'confirmRestore'    => __( 'Are you sure you want to restore this snippet?', 'edge-code-snippets' ),
-					'confirmBulkDelete' => __( 'Are you sure you want to permanently delete the selected snippets?', 'edge-code-snippets' ),
-					'confirmBulkTrash'  => __( 'Are you sure you want to move the selected snippets to trash?', 'edge-code-snippets' ),
-					'loading'           => __( 'Loading...', 'edge-code-snippets' ),
-					'processing'        => __( 'Processing...', 'edge-code-snippets' ),
-					'error'             => __( 'An error occurred.', 'edge-code-snippets' ),
-					'selectSnippets'    => __( 'Please select at least one snippet.', 'edge-code-snippets' ),
-					'selectAction'      => __( 'Please select an action.', 'edge-code-snippets' ),
+					'confirmDelete'     => __( 'Are you sure you want to delete this snippet?', 'code-snippet' ),
+					'confirmTrash'      => __( 'Are you sure you want to move this snippet to trash?', 'code-snippet' ),
+					'confirmRestore'    => __( 'Are you sure you want to restore this snippet?', 'code-snippet' ),
+					'confirmBulkDelete' => __( 'Are you sure you want to permanently delete the selected snippets?', 'code-snippet' ),
+					'confirmBulkTrash'  => __( 'Are you sure you want to move the selected snippets to trash?', 'code-snippet' ),
+					'loading'           => __( 'Loading...', 'code-snippet' ),
+					'processing'        => __( 'Processing...', 'code-snippet' ),
+					'error'             => __( 'An error occurred.', 'code-snippet' ),
+					'selectSnippets'    => __( 'Please select at least one snippet.', 'code-snippet' ),
+					'selectAction'      => __( 'Please select an action.', 'code-snippet' ),
 				],
 			]
 		);
@@ -329,10 +329,10 @@ class Admin {
 	 */
 	public function get_type_label( string $type ): string {
 		$types = [
-			'php'  => __( 'PHP', 'edge-code-snippets' ),
-			'js'   => __( 'JavaScript', 'edge-code-snippets' ),
-			'css'  => __( 'CSS', 'edge-code-snippets' ),
-			'html' => __( 'HTML', 'edge-code-snippets' ),
+			'php'  => __( 'PHP', 'code-snippet' ),
+			'js'   => __( 'JavaScript', 'code-snippet' ),
+			'css'  => __( 'CSS', 'code-snippet' ),
+			'html' => __( 'HTML', 'code-snippet' ),
 		];
 
 		return $types[ $type ] ?? ucfirst( $type );
@@ -345,7 +345,7 @@ class Admin {
 	 * @return string
 	 */
 	public function get_status_label( int $active ): string {
-		return $active ? __( 'Active', 'edge-code-snippets' ) : __( 'Inactive', 'edge-code-snippets' );
+		return $active ? __( 'Active', 'code-snippet' ) : __( 'Inactive', 'code-snippet' );
 	}
 
 	/**
@@ -391,7 +391,7 @@ class Admin {
 					'snippet_id' => $id,
 					'ip' => $this->get_client_ip()
 				] );
-				wp_die( esc_html__( 'You do not have permission to perform this action.', 'edge-code-snippets' ) );
+				wp_die( esc_html__( 'You do not have permission to perform this action.', 'code-snippet' ) );
 			}
 
 			// Verify nonce
@@ -403,22 +403,22 @@ class Admin {
 					'ip' => $this->get_client_ip(),
 					'provided_nonce' => $nonce
 				] );
-				wp_die( esc_html__( 'Security check failed.', 'edge-code-snippets' ) );
+				wp_die( esc_html__( 'Security check failed.', 'code-snippet' ) );
 			}
 
 			// Validate action
 			$allowed_actions = [ 'toggle', 'trash', 'restore', 'delete' ];
 			if ( ! in_array( $action, $allowed_actions, true ) ) {
 				$this->log_error( 'Action failed: Invalid action', [ 'action' => $action, 'allowed_actions' => $allowed_actions ] );
-				wp_die( esc_html__( 'Invalid action.', 'edge-code-snippets' ) );
+				wp_die( esc_html__( 'Invalid action.', 'code-snippet' ) );
 			}
 
 			// Verify snippet exists
 			$snippet = $this->snippet->get( $id );
 			if ( ! $snippet ) {
 				$this->log_error( 'Action failed: Snippet not found', [ 'snippet_id' => $id, 'action' => $action ] );
-				$this->add_admin_notice( __( 'Snippet not found.', 'edge-code-snippets' ), 'error' );
-				wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets' ) );
+				$this->add_admin_notice( __( 'Snippet not found.', 'code-snippet' ), 'error' );
+				wp_safe_redirect( admin_url( 'admin.php?page=code-snippet' ) );
 				exit;
 			}
 
@@ -444,8 +444,8 @@ class Admin {
 				'action' => $action ?? 'unknown',
 				'snippet_id' => $id ?? 'unknown'
 			] );
-			$this->add_admin_notice( __( 'An unexpected error occurred. Please try again.', 'edge-code-snippets' ), 'error' );
-			wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets' ) );
+			$this->add_admin_notice( __( 'An unexpected error occurred. Please try again.', 'code-snippet' ), 'error' );
+			wp_safe_redirect( admin_url( 'admin.php?page=code-snippet' ) );
 			exit;
 		}
 	}
@@ -460,8 +460,8 @@ class Admin {
 		$snippet = $this->snippet->get( $id );
 		if ( ! $snippet ) {
 			$this->log_error( 'Toggle snippet failed: Snippet not found', [ 'snippet_id' => $id ] );
-			$this->add_admin_notice( __( 'Snippet not found.', 'edge-code-snippets' ), 'error' );
-			wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets' ) );
+			$this->add_admin_notice( __( 'Snippet not found.', 'code-snippet' ), 'error' );
+			wp_safe_redirect( admin_url( 'admin.php?page=code-snippet' ) );
 			exit;
 		}
 
@@ -470,11 +470,11 @@ class Admin {
 
 		if ( $result !== false ) {
 			do_action( 'ecs_snippet_status_toggled', $id, (bool) $new_status );
-			$status_text = $new_status ? __( 'activated', 'edge-code-snippets' ) : __( 'deactivated', 'edge-code-snippets' );
+			$status_text = $new_status ? __( 'activated', 'code-snippet' ) : __( 'deactivated', 'code-snippet' );
 			$this->add_admin_notice( 
 				sprintf( 
 					/* translators: %s: Status text (activated/deactivated) */
-					__( 'Snippet %s successfully.', 'edge-code-snippets' ), 
+					__( 'Snippet %s successfully.', 'code-snippet' ), 
 					$status_text 
 				), 
 				'success' 
@@ -485,10 +485,10 @@ class Admin {
 				'new_status' => $new_status,
 				'operation' => 'toggle'
 			] );
-			$this->add_admin_notice( __( 'Failed to update snippet status. Please try again.', 'edge-code-snippets' ), 'error' );
+			$this->add_admin_notice( __( 'Failed to update snippet status. Please try again.', 'code-snippet' ), 'error' );
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=code-snippet' ) );
 		exit;
 	}
 
@@ -502,16 +502,16 @@ class Admin {
 		$result = $this->snippet->soft_delete( $id );
 		
 		if ( $result ) {
-			$this->add_admin_notice( __( 'Snippet moved to trash successfully.', 'edge-code-snippets' ), 'success' );
+			$this->add_admin_notice( __( 'Snippet moved to trash successfully.', 'code-snippet' ), 'success' );
 		} else {
 			$this->log_database_error( 'Failed to trash snippet', [
 				'snippet_id' => $id,
 				'operation' => 'trash'
 			] );
-			$this->add_admin_notice( __( 'Failed to move snippet to trash. Please try again.', 'edge-code-snippets' ), 'error' );
+			$this->add_admin_notice( __( 'Failed to move snippet to trash. Please try again.', 'code-snippet' ), 'error' );
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=code-snippet' ) );
 		exit;
 	}
 
@@ -525,16 +525,16 @@ class Admin {
 		$result = $this->snippet->restore( $id );
 		
 		if ( $result ) {
-			$this->add_admin_notice( __( 'Snippet restored successfully.', 'edge-code-snippets' ), 'success' );
+			$this->add_admin_notice( __( 'Snippet restored successfully.', 'code-snippet' ), 'success' );
 		} else {
 			$this->log_database_error( 'Failed to restore snippet', [
 				'snippet_id' => $id,
 				'operation' => 'restore'
 			] );
-			$this->add_admin_notice( __( 'Failed to restore snippet. Please try again.', 'edge-code-snippets' ), 'error' );
+			$this->add_admin_notice( __( 'Failed to restore snippet. Please try again.', 'code-snippet' ), 'error' );
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets&view=trash' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=code-snippet&view=trash' ) );
 		exit;
 	}
 
@@ -548,16 +548,16 @@ class Admin {
 		$result = $this->snippet->delete( $id );
 		
 		if ( $result ) {
-			$this->add_admin_notice( __( 'Snippet deleted permanently.', 'edge-code-snippets' ), 'success' );
+			$this->add_admin_notice( __( 'Snippet deleted permanently.', 'code-snippet' ), 'success' );
 		} else {
 			$this->log_database_error( 'Failed to delete snippet permanently', [
 				'snippet_id' => $id,
 				'operation' => 'permanent_delete'
 			] );
-			$this->add_admin_notice( __( 'Failed to delete snippet permanently. Please try again.', 'edge-code-snippets' ), 'error' );
+			$this->add_admin_notice( __( 'Failed to delete snippet permanently. Please try again.', 'code-snippet' ), 'error' );
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets&view=trash' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=code-snippet&view=trash' ) );
 		exit;
 	}
 
@@ -576,14 +576,14 @@ class Admin {
 			$id = absint( $_POST['id'] ?? 0 );
 			if ( ! $id ) {
 				$this->log_error( 'Toggle snippet failed: Invalid snippet ID', [ 'provided_id' => $_POST['id'] ?? 'not_set' ] );
-				$this->send_ajax_response( false, __( 'Invalid snippet ID.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Invalid snippet ID.', 'code-snippet' ) );
 				return;
 			}
 
 			$snippet = $this->snippet->get( $id );
 			if ( ! $snippet ) {
 				$this->log_error( 'Toggle snippet failed: Snippet not found', [ 'snippet_id' => $id ] );
-				$this->send_ajax_response( false, __( 'Snippet not found.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Snippet not found.', 'code-snippet' ) );
 				return;
 			}
 
@@ -598,12 +598,12 @@ class Admin {
 					true,
 					sprintf(
 						/* translators: %s: New status label */
-						__( 'Snippet status changed to %s.', 'edge-code-snippets' ),
-						$new_status ? __( 'Active', 'edge-code-snippets' ) : __( 'Inactive', 'edge-code-snippets' )
+						__( 'Snippet status changed to %s.', 'code-snippet' ),
+						$new_status ? __( 'Active', 'code-snippet' ) : __( 'Inactive', 'code-snippet' )
 					),
 					[
 						'active' => $new_status,
-						'status' => $new_status ? __( 'Active', 'edge-code-snippets' ) : __( 'Inactive', 'edge-code-snippets' ),
+						'status' => $new_status ? __( 'Active', 'code-snippet' ) : __( 'Inactive', 'code-snippet' ),
 					]
 				);
 			} else {
@@ -612,7 +612,7 @@ class Admin {
 					'new_status' => $new_status,
 					'operation' => 'update'
 				] );
-				$this->send_ajax_response( false, __( 'Failed to update snippet. Please try again.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Failed to update snippet. Please try again.', 'code-snippet' ) );
 			}
 		} catch ( \Exception $e ) {
 			$this->log_error( 'Exception in ajax_toggle_snippet', [
@@ -621,7 +621,7 @@ class Admin {
 				'line' => $e->getLine(),
 				'snippet_id' => $id ?? 'unknown'
 			] );
-			$this->send_ajax_response( false, __( 'An unexpected error occurred. Please try again.', 'edge-code-snippets' ) );
+			$this->send_ajax_response( false, __( 'An unexpected error occurred. Please try again.', 'code-snippet' ) );
 		}
 	}
 
@@ -640,14 +640,14 @@ class Admin {
 			$id = absint( $_POST['id'] ?? 0 );
 			if ( ! $id ) {
 				$this->log_error( 'Delete snippet failed: Invalid snippet ID', [ 'provided_id' => $_POST['id'] ?? 'not_set' ] );
-				$this->send_ajax_response( false, __( 'Invalid snippet ID.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Invalid snippet ID.', 'code-snippet' ) );
 				return;
 			}
 
 			$snippet = $this->snippet->get( $id );
 			if ( ! $snippet ) {
 				$this->log_error( 'Delete snippet failed: Snippet not found', [ 'snippet_id' => $id ] );
-				$this->send_ajax_response( false, __( 'Snippet not found.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Snippet not found.', 'code-snippet' ) );
 				return;
 			}
 
@@ -657,12 +657,12 @@ class Admin {
 			if ( $permanent ) {
 				// Permanently delete the snippet
 				$result = $this->snippet->delete( $id );
-				$message = __( 'Snippet permanently deleted.', 'edge-code-snippets' );
+				$message = __( 'Snippet permanently deleted.', 'code-snippet' );
 				$operation = 'permanent_delete';
 			} else {
 				// Soft delete (move to trash)
 				$result = $this->snippet->soft_delete( $id );
-				$message = __( 'Snippet moved to trash.', 'edge-code-snippets' );
+				$message = __( 'Snippet moved to trash.', 'code-snippet' );
 				$operation = 'soft_delete';
 			}
 
@@ -674,7 +674,7 @@ class Admin {
 					'operation' => $operation,
 					'permanent' => $permanent
 				] );
-				$this->send_ajax_response( false, __( 'Failed to delete snippet. Please try again.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Failed to delete snippet. Please try again.', 'code-snippet' ) );
 			}
 		} catch ( \Exception $e ) {
 			$this->log_error( 'Exception in ajax_delete_snippet', [
@@ -683,7 +683,7 @@ class Admin {
 				'line' => $e->getLine(),
 				'snippet_id' => $id ?? 'unknown'
 			] );
-			$this->send_ajax_response( false, __( 'An unexpected error occurred. Please try again.', 'edge-code-snippets' ) );
+			$this->send_ajax_response( false, __( 'An unexpected error occurred. Please try again.', 'code-snippet' ) );
 		}
 	}
 
@@ -704,13 +704,13 @@ class Admin {
 
 			if ( empty( $snippet_ids ) ) {
 				$this->log_error( 'Bulk action failed: No snippets selected', [ 'action' => $action ] );
-				$this->send_ajax_response( false, __( 'No snippets selected.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'No snippets selected.', 'code-snippet' ) );
 				return;
 			}
 
 			if ( empty( $action ) ) {
 				$this->log_error( 'Bulk action failed: Invalid action', [ 'provided_action' => $_POST['bulk_action'] ?? 'not_set' ] );
-				$this->send_ajax_response( false, __( 'Invalid action.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Invalid action.', 'code-snippet' ) );
 				return;
 			}
 
@@ -718,7 +718,7 @@ class Admin {
 			$allowed_actions = [ 'activate', 'deactivate', 'trash', 'restore', 'delete' ];
 			if ( ! in_array( $action, $allowed_actions, true ) ) {
 				$this->log_error( 'Bulk action failed: Unknown action', [ 'action' => $action, 'allowed_actions' => $allowed_actions ] );
-				$this->send_ajax_response( false, __( 'Invalid action.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Invalid action.', 'code-snippet' ) );
 				return;
 			}
 
@@ -786,14 +786,14 @@ class Admin {
 			if ( $updated > 0 ) {
 				$message = sprintf(
 					/* translators: %d: Number of updated snippets */
-					_n( '%d snippet updated.', '%d snippets updated.', $updated, 'edge-code-snippets' ),
+					_n( '%d snippet updated.', '%d snippets updated.', $updated, 'code-snippet' ),
 					$updated
 				);
 
 				if ( $failed > 0 ) {
 					$message .= ' ' . sprintf(
 						/* translators: %d: Number of failed snippets */
-						_n( '%d snippet failed.', '%d snippets failed.', $failed, 'edge-code-snippets' ),
+						_n( '%d snippet failed.', '%d snippets failed.', $failed, 'code-snippet' ),
 						$failed
 					);
 				}
@@ -805,7 +805,7 @@ class Admin {
 					'snippet_ids' => $snippet_ids,
 					'failed_ids' => $failed_ids
 				] );
-				$this->send_ajax_response( false, __( 'Failed to update snippets. Please try again.', 'edge-code-snippets' ) );
+				$this->send_ajax_response( false, __( 'Failed to update snippets. Please try again.', 'code-snippet' ) );
 			}
 		} catch ( \Exception $e ) {
 			$this->log_error( 'Exception in ajax_bulk_action', [
@@ -815,7 +815,7 @@ class Admin {
 				'action' => $action ?? 'unknown',
 				'snippet_ids' => $snippet_ids ?? []
 			] );
-			$this->send_ajax_response( false, __( 'An unexpected error occurred. Please try again.', 'edge-code-snippets' ) );
+			$this->send_ajax_response( false, __( 'An unexpected error occurred. Please try again.', 'code-snippet' ) );
 		}
 	}
 
@@ -833,7 +833,7 @@ class Admin {
 				'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
 				'action' => $_POST['action'] ?? 'Unknown'
 			] );
-			$this->send_ajax_response( false, __( 'Security check failed.', 'edge-code-snippets' ), [], 403 );
+			$this->send_ajax_response( false, __( 'Security check failed.', 'code-snippet' ), [], 403 );
 			return false;
 		}
 
@@ -845,7 +845,7 @@ class Admin {
 				'ip' => $this->get_client_ip(),
 				'action' => $_POST['action'] ?? 'Unknown'
 			] );
-			$this->send_ajax_response( false, __( 'You do not have permission to perform this action.', 'edge-code-snippets' ), [], 403 );
+			$this->send_ajax_response( false, __( 'You do not have permission to perform this action.', 'code-snippet' ), [], 403 );
 			return false;
 		}
 

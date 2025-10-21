@@ -24,13 +24,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<span class="ecs-logo-text">WP Smart Code</span>
 			</div>
 			<div class="ecs-header-actions">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-tools' ) ); ?>" class="button button-secondary button-large">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-tools' ) ); ?>" class="button button-secondary button-large">
 					<span class="dashicons dashicons-admin-tools"></span>
-					<?php esc_html_e( 'Tools', 'edge-code-snippets' ); ?>
+					<?php esc_html_e( 'Tools', 'code-snippet' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-editor' ) ); ?>" class="button button-primary button-large">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-editor' ) ); ?>" class="button button-primary button-large">
 					<span class="dashicons dashicons-plus-alt"></span>
-					<?php esc_html_e( 'Add New Snippet', 'edge-code-snippets' ); ?>
+					<?php esc_html_e( 'Add New Snippet', 'code-snippet' ); ?>
 				</a>
 			</div>
 		</div>
@@ -50,25 +50,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$css_count = $snippet_model->count( [ 'type' => 'css', 'deleted' => 0 ] );
 			$html_count = $snippet_model->count( [ 'type' => 'html', 'deleted' => 0 ] );
 			?>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet' ) ); ?>" 
 			   class="ecs-type-tab <?php echo empty( $current_type ) ? 'active' : ''; ?>">
-				<?php esc_html_e( 'All Snippets', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'All Snippets', 'code-snippet' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets&type=php' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet&type=php' ) ); ?>" 
 			   class="ecs-type-tab <?php echo 'php' === $current_type ? 'active' : ''; ?>">
-				<?php esc_html_e( 'PHP', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'PHP', 'code-snippet' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets&type=js' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet&type=js' ) ); ?>" 
 			   class="ecs-type-tab <?php echo 'js' === $current_type ? 'active' : ''; ?>">
-				<?php esc_html_e( 'JavaScript', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'JavaScript', 'code-snippet' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets&type=css' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet&type=css' ) ); ?>" 
 			   class="ecs-type-tab <?php echo 'css' === $current_type ? 'active' : ''; ?>">
-				<?php esc_html_e( 'CSS', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'CSS', 'code-snippet' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets&type=html' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet&type=html' ) ); ?>" 
 			   class="ecs-type-tab <?php echo 'html' === $current_type ? 'active' : ''; ?>">
-				<?php esc_html_e( 'HTML', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'HTML', 'code-snippet' ); ?>
 			</a>
 		</div>
 	</div>
@@ -85,11 +85,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<form method="get">
-		<input type="hidden" name="page" value="edge-code-snippets">
+		<input type="hidden" name="page" value="wp-smart-code">
 		<?php
 		if ( isset( $list_table ) && is_object( $list_table ) ) {
 			$list_table->views();
-			$list_table->search_box( __( 'Search Snippets', 'edge-code-snippets' ), 'snippet' );
+			$list_table->search_box( __( 'Search Snippets', 'code-snippet' ), 'snippet' );
 			$list_table->display();
 		}
 		?>

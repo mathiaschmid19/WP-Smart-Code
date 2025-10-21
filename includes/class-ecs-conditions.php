@@ -351,14 +351,14 @@ class Conditions
     public static function get_page_types(): array
     {
         return [
-            'home'       => __('Blog Home', 'edge-code-snippets'),
-            'front_page' => __('Front Page', 'edge-code-snippets'),
-            'single'     => __('Single Post', 'edge-code-snippets'),
-            'page'       => __('Page', 'edge-code-snippets'),
-            'archive'    => __('Archive', 'edge-code-snippets'),
-            'search'     => __('Search Results', 'edge-code-snippets'),
-            '404'        => __('404 Error', 'edge-code-snippets'),
-            'admin'      => __('Admin Area', 'edge-code-snippets'),
+            'home'       => __('Blog Home', 'code-snippet'),
+            'front_page' => __('Front Page', 'code-snippet'),
+            'single'     => __('Single Post', 'code-snippet'),
+            'page'       => __('Page', 'code-snippet'),
+            'archive'    => __('Archive', 'code-snippet'),
+            'search'     => __('Search Results', 'code-snippet'),
+            '404'        => __('404 Error', 'code-snippet'),
+            'admin'      => __('Admin Area', 'code-snippet'),
         ];
     }
 
@@ -375,7 +375,7 @@ class Conditions
             $wp_roles = new \WP_Roles();
         }
 
-        $roles = ['guest' => __('Guest (Not Logged In)', 'edge-code-snippets')];
+        $roles = ['guest' => __('Guest (Not Logged In)', 'code-snippet')];
 
         foreach ($wp_roles->roles as $role_key => $role) {
             $roles[$role_key] = $role['name'];
@@ -392,8 +392,8 @@ class Conditions
     public static function get_device_types(): array
     {
         return [
-            'mobile'  => __('Mobile', 'edge-code-snippets'),
-            'desktop' => __('Desktop', 'edge-code-snippets'),
+            'mobile'  => __('Mobile', 'code-snippet'),
+            'desktop' => __('Desktop', 'code-snippet'),
         ];
     }
 
@@ -405,8 +405,8 @@ class Conditions
     public static function get_login_statuses(): array
     {
         return [
-            'logged_in'  => __('Logged In', 'edge-code-snippets'),
-            'logged_out' => __('Logged Out', 'edge-code-snippets'),
+            'logged_in'  => __('Logged In', 'code-snippet'),
+            'logged_out' => __('Logged Out', 'code-snippet'),
         ];
     }
 

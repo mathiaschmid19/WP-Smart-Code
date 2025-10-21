@@ -176,7 +176,7 @@ class ImportExport {
 		}
 
 		if ( 'unknown' === $format ) {
-			$results['errors'][] = __( 'Unknown or unsupported import format.', 'edge-code-snippets' );
+			$results['errors'][] = __( 'Unknown or unsupported import format.', 'code-snippet' );
 			return $results;
 		}
 
@@ -201,7 +201,7 @@ class ImportExport {
 			} else {
 				$results['errors'][] = sprintf(
 					/* translators: %s: format name */
-					__( 'Invalid %s import data format after conversion.', 'edge-code-snippets' ),
+					__( 'Invalid %s import data format after conversion.', 'code-snippet' ),
 					FormatAdapter::get_format_name( $format )
 				);
 				return $results;
@@ -215,7 +215,7 @@ class ImportExport {
 			if ( empty( $snippet_data['title'] ) || empty( $snippet_data['code'] ) || empty( $snippet_data['type'] ) ) {
 				$results['errors'][] = sprintf(
 					/* translators: %d: snippet index */
-					__( 'Snippet #%d is missing required fields.', 'edge-code-snippets' ),
+					__( 'Snippet #%d is missing required fields.', 'code-snippet' ),
 					$index + 1
 				);
 				continue;
@@ -228,7 +228,7 @@ class ImportExport {
 				if ( $options['skip_duplicates'] ) {
 					$results['skipped'][] = sprintf(
 						/* translators: %s: snippet title */
-						__( 'Snippet "%s" already exists (skipped).', 'edge-code-snippets' ),
+						__( 'Snippet "%s" already exists (skipped).', 'code-snippet' ),
 						$snippet_data['title']
 					);
 					continue;
@@ -249,13 +249,13 @@ class ImportExport {
 					if ( $updated ) {
 						$results['success'][] = sprintf(
 							/* translators: %s: snippet title */
-							__( 'Snippet "%s" updated successfully.', 'edge-code-snippets' ),
+							__( 'Snippet "%s" updated successfully.', 'code-snippet' ),
 							$snippet_data['title']
 						);
 					} else {
 						$results['errors'][] = sprintf(
 							/* translators: %s: snippet title */
-							__( 'Failed to update snippet "%s".', 'edge-code-snippets' ),
+							__( 'Failed to update snippet "%s".', 'code-snippet' ),
 							$snippet_data['title']
 						);
 					}
@@ -280,7 +280,7 @@ class ImportExport {
 			if ( ! $validation_result['valid'] ) {
 				$results['errors'][] = sprintf(
 					/* translators: 1: snippet title, 2: error message */
-					__( 'Snippet "%1$s" has syntax errors: %2$s', 'edge-code-snippets' ),
+					__( 'Snippet "%1$s" has syntax errors: %2$s', 'code-snippet' ),
 					$snippet_data['title'],
 					$validation_result['error']
 				);
@@ -304,13 +304,13 @@ class ImportExport {
 			if ( $snippet_id ) {
 				$results['success'][] = sprintf(
 					/* translators: %s: snippet title */
-					__( 'Snippet "%s" imported successfully.', 'edge-code-snippets' ),
+					__( 'Snippet "%s" imported successfully.', 'code-snippet' ),
 					$snippet_data['title']
 				);
 			} else {
 				$results['errors'][] = sprintf(
 					/* translators: %s: snippet title */
-					__( 'Failed to import snippet "%s".', 'edge-code-snippets' ),
+					__( 'Failed to import snippet "%s".', 'code-snippet' ),
 					$snippet_data['title']
 				);
 			}
@@ -327,12 +327,12 @@ class ImportExport {
 	public function handle_export(): void {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to export snippets.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to export snippets.', 'code-snippet' ) );
 		}
 
 		// Verify nonce
 		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'ecs_export_snippets' ) ) {
-			wp_die( esc_html__( 'Security verification failed.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'Security verification failed.', 'code-snippet' ) );
 		}
 
 		// Get export options
@@ -347,7 +347,7 @@ class ImportExport {
 		$export_data = $this->export_all( $options );
 
 		// Generate filename
-		$filename = 'edge-code-snippets-' . gmdate( 'Y-m-d-His' ) . '.json';
+		$filename = 'wp-smart-code-' . gmdate( 'Y-m-d-His' ) . '.json';
 
 		// Set headers for download
 		header( 'Content-Type: application/json; charset=utf-8' );
@@ -369,12 +369,12 @@ class ImportExport {
 	public function handle_import(): void {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to import snippets.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to import snippets.', 'code-snippet' ) );
 		}
 
 		// Verify nonce
 		if ( ! isset( $_POST['ecs_import_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ecs_import_nonce'] ) ), 'ecs_import_snippets' ) ) {
-			wp_die( esc_html__( 'Security verification failed.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'Security verification failed.', 'code-snippet' ) );
 		}
 
 		// Check if file was uploaded
@@ -406,7 +406,7 @@ class ImportExport {
 		}
 		
 		if ( 'json' !== $file_ext ) {
-			wp_die( esc_html__( 'Please upload a valid JSON file.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'Please upload a valid JSON file.', 'code-snippet' ) );
 		}
 
 		// Read file contents
@@ -414,7 +414,7 @@ class ImportExport {
 		$file_contents = file_get_contents( $_FILES['import_file']['tmp_name'] );
 
 		if ( false === $file_contents ) {
-			wp_die( esc_html__( 'Failed to read uploaded file.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'Failed to read uploaded file.', 'code-snippet' ) );
 		}
 
 		// Parse JSON
@@ -432,14 +432,14 @@ class ImportExport {
 			$json_error = json_last_error_msg();
 			wp_die( sprintf( 
 				/* translators: %s: JSON error message */
-				esc_html__( 'Invalid JSON file format: %s', 'edge-code-snippets' ), 
+				esc_html__( 'Invalid JSON file format: %s', 'code-snippet' ), 
 				esc_html( $json_error ) 
 			) );
 		}
 
 		// Ensure we have an array
 		if ( ! is_array( $import_data ) ) {
-			wp_die( esc_html__( 'JSON file must contain an array or object.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'JSON file must contain an array or object.', 'code-snippet' ) );
 		}
 
 		// Get import options
@@ -455,7 +455,7 @@ class ImportExport {
 		// Redirect with results
 		$redirect_url = add_query_arg(
 			[
-				'page'              => 'edge-code-snippets-tools',
+				'page'              => 'wp-smart-code-tools',
 				'tab'               => 'import',
 				'import'            => 'complete',
 				'imported'          => count( $results['success'] ),
@@ -484,26 +484,26 @@ class ImportExport {
 	public function ajax_export_single(): void {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'edge-code-snippets' ) ] );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'code-snippet' ) ] );
 		}
 
 		// Verify nonce
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wp_rest' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Security verification failed.', 'edge-code-snippets' ) ] );
+			wp_send_json_error( [ 'message' => __( 'Security verification failed.', 'code-snippet' ) ] );
 		}
 
 		// Get snippet ID
 		$snippet_id = isset( $_POST['snippet_id'] ) ? absint( $_POST['snippet_id'] ) : 0;
 
 		if ( ! $snippet_id ) {
-			wp_send_json_error( [ 'message' => __( 'Invalid snippet ID.', 'edge-code-snippets' ) ] );
+			wp_send_json_error( [ 'message' => __( 'Invalid snippet ID.', 'code-snippet' ) ] );
 		}
 
 		// Export snippet
 		$export_data = $this->export_single( $snippet_id );
 
 		if ( ! $export_data ) {
-			wp_send_json_error( [ 'message' => __( 'Snippet not found.', 'edge-code-snippets' ) ] );
+			wp_send_json_error( [ 'message' => __( 'Snippet not found.', 'code-snippet' ) ] );
 		}
 
 		wp_send_json_success( [ 'data' => $export_data ] );

@@ -88,7 +88,7 @@ class REST extends WP_REST_Controller {
 			[
 				'args' => [
 					'id' => [
-						'description' => __( 'Unique identifier for the snippet.', 'edge-code-snippets' ),
+						'description' => __( 'Unique identifier for the snippet.', 'code-snippet' ),
 						'type'        => 'integer',
 					],
 				],
@@ -114,7 +114,7 @@ class REST extends WP_REST_Controller {
 						'force' => [
 							'type'        => 'boolean',
 							'default'     => false,
-							'description' => __( 'Whether to bypass trash and force deletion.', 'edge-code-snippets' ),
+							'description' => __( 'Whether to bypass trash and force deletion.', 'code-snippet' ),
 						],
 					],
 				],
@@ -187,7 +187,7 @@ class REST extends WP_REST_Controller {
 		if ( ! $snippet ) {
 			return new WP_Error(
 				'ecs_snippet_not_found',
-				__( 'Snippet not found.', 'edge-code-snippets' ),
+				__( 'Snippet not found.', 'code-snippet' ),
 				[ 'status' => 404 ]
 			);
 		}
@@ -214,7 +214,7 @@ class REST extends WP_REST_Controller {
 			if ( empty( $params['title'] ) ) {
 				return new WP_Error(
 					'ecs_missing_title',
-					__( 'Snippet title is required.', 'edge-code-snippets' ),
+					__( 'Snippet title is required.', 'code-snippet' ),
 					[ 'status' => 400 ]
 				);
 			}
@@ -222,7 +222,7 @@ class REST extends WP_REST_Controller {
 			if ( empty( $params['code'] ) ) {
 				return new WP_Error(
 					'ecs_missing_code',
-					__( 'Snippet code is required.', 'edge-code-snippets' ),
+					__( 'Snippet code is required.', 'code-snippet' ),
 					[ 'status' => 400 ]
 				);
 			}
@@ -230,7 +230,7 @@ class REST extends WP_REST_Controller {
 			if ( empty( $params['type'] ) ) {
 				return new WP_Error(
 					'ecs_missing_type',
-					__( 'Snippet type is required.', 'edge-code-snippets' ),
+					__( 'Snippet type is required.', 'code-snippet' ),
 					[ 'status' => 400 ]
 				);
 			}
@@ -242,7 +242,7 @@ class REST extends WP_REST_Controller {
 					$error_message = $syntax_validation['error'];
 					if ( $syntax_validation['line'] > 0 ) {
 						/* translators: %1$s: Error message, %2$d: Line number */
-						$error_message = sprintf( __( '%1$s on line %2$d', 'edge-code-snippets' ), $error_message, $syntax_validation['line'] );
+						$error_message = sprintf( __( '%1$s on line %2$d', 'code-snippet' ), $error_message, $syntax_validation['line'] );
 					}
 					
 					// Log syntax error for debugging
@@ -260,7 +260,7 @@ class REST extends WP_REST_Controller {
 				
 				return new WP_Error(
 					'ecs_validation_error',
-					__( 'Failed to validate snippet syntax: ', 'edge-code-snippets' ) . $e->getMessage(),
+					__( 'Failed to validate snippet syntax: ', 'code-snippet' ) . $e->getMessage(),
 					[ 'status' => 500 ]
 				);
 			}
@@ -275,7 +275,7 @@ class REST extends WP_REST_Controller {
 			if ( $existing ) {
 				return new WP_Error(
 					'ecs_slug_exists',
-					__( 'A snippet with this slug already exists.', 'edge-code-snippets' ),
+					__( 'A snippet with this slug already exists.', 'code-snippet' ),
 					[ 'status' => 409 ]
 				);
 			}
@@ -302,7 +302,7 @@ class REST extends WP_REST_Controller {
 				
 				return new WP_Error(
 					'ecs_create_failed',
-					__( 'Failed to create snippet.', 'edge-code-snippets' ),
+					__( 'Failed to create snippet.', 'code-snippet' ),
 					[ 'status' => 500 ]
 				);
 			}
@@ -320,7 +320,7 @@ class REST extends WP_REST_Controller {
 			
 			return new WP_Error(
 				'ecs_unexpected_error',
-				__( 'An unexpected error occurred: ', 'edge-code-snippets' ) . $e->getMessage(),
+				__( 'An unexpected error occurred: ', 'code-snippet' ) . $e->getMessage(),
 				[ 'status' => 500 ]
 			);
 		}
@@ -339,7 +339,7 @@ class REST extends WP_REST_Controller {
 		if ( ! $snippet ) {
 			return new WP_Error(
 				'ecs_snippet_not_found',
-				__( 'Snippet not found.', 'edge-code-snippets' ),
+				__( 'Snippet not found.', 'code-snippet' ),
 				[ 'status' => 404 ]
 			);
 		}
@@ -360,7 +360,7 @@ class REST extends WP_REST_Controller {
 				if ( $existing && intval( $existing['id'] ) !== $id ) {
 					return new WP_Error(
 						'ecs_slug_exists',
-						__( 'A snippet with this slug already exists.', 'edge-code-snippets' ),
+						__( 'A snippet with this slug already exists.', 'code-snippet' ),
 						[ 'status' => 409 ]
 					);
 				}
@@ -382,7 +382,7 @@ class REST extends WP_REST_Controller {
 				$error_message = $syntax_validation['error'];
 				if ( $syntax_validation['line'] > 0 ) {
 					/* translators: %1$s: Error message, %2$d: Line number */
-					$error_message = sprintf( __( '%1$s on line %2$d', 'edge-code-snippets' ), $error_message, $syntax_validation['line'] );
+					$error_message = sprintf( __( '%1$s on line %2$d', 'code-snippet' ), $error_message, $syntax_validation['line'] );
 				}
 				
 				return new WP_Error(
@@ -410,7 +410,7 @@ class REST extends WP_REST_Controller {
 		if ( ! $result ) {
 			return new WP_Error(
 				'ecs_update_failed',
-				__( 'Failed to update snippet.', 'edge-code-snippets' ),
+				__( 'Failed to update snippet.', 'code-snippet' ),
 				[ 'status' => 500 ]
 			);
 		}
@@ -434,7 +434,7 @@ class REST extends WP_REST_Controller {
 		if ( ! $snippet ) {
 			return new WP_Error(
 				'ecs_snippet_not_found',
-				__( 'Snippet not found.', 'edge-code-snippets' ),
+				__( 'Snippet not found.', 'code-snippet' ),
 				[ 'status' => 404 ]
 			);
 		}
@@ -445,7 +445,7 @@ class REST extends WP_REST_Controller {
 		if ( ! $result ) {
 			return new WP_Error(
 				'ecs_delete_failed',
-				__( 'Failed to delete snippet.', 'edge-code-snippets' ),
+				__( 'Failed to delete snippet.', 'code-snippet' ),
 				[ 'status' => 500 ]
 			);
 		}
@@ -496,7 +496,7 @@ class REST extends WP_REST_Controller {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new WP_Error(
 				'ecs_rest_forbidden',
-				__( 'Sorry, you are not allowed to view snippets.', 'edge-code-snippets' ),
+				__( 'Sorry, you are not allowed to view snippets.', 'code-snippet' ),
 				[ 'status' => rest_authorization_required_code() ]
 			);
 		}
@@ -524,7 +524,7 @@ class REST extends WP_REST_Controller {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new WP_Error(
 				'ecs_rest_forbidden_create',
-				__( 'Sorry, you are not allowed to create snippets.', 'edge-code-snippets' ),
+				__( 'Sorry, you are not allowed to create snippets.', 'code-snippet' ),
 				[ 'status' => rest_authorization_required_code() ]
 			);
 		}
@@ -542,7 +542,7 @@ class REST extends WP_REST_Controller {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new WP_Error(
 				'ecs_rest_forbidden_update',
-				__( 'Sorry, you are not allowed to update snippets.', 'edge-code-snippets' ),
+				__( 'Sorry, you are not allowed to update snippets.', 'code-snippet' ),
 				[ 'status' => rest_authorization_required_code() ]
 			);
 		}
@@ -560,7 +560,7 @@ class REST extends WP_REST_Controller {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new WP_Error(
 				'ecs_rest_forbidden_delete',
-				__( 'Sorry, you are not allowed to delete snippets.', 'edge-code-snippets' ),
+				__( 'Sorry, you are not allowed to delete snippets.', 'code-snippet' ),
 				[ 'status' => rest_authorization_required_code() ]
 			);
 		}
@@ -576,7 +576,7 @@ class REST extends WP_REST_Controller {
 	public function get_collection_params(): array {
 		return [
 			'page'     => [
-				'description'       => __( 'Current page of the collection.', 'edge-code-snippets' ),
+				'description'       => __( 'Current page of the collection.', 'code-snippet' ),
 				'type'              => 'integer',
 				'default'           => 1,
 				'sanitize_callback' => 'absint',
@@ -584,7 +584,7 @@ class REST extends WP_REST_Controller {
 				'minimum'           => 1,
 			],
 			'per_page' => [
-				'description'       => __( 'Maximum number of items to be returned in result set.', 'edge-code-snippets' ),
+				'description'       => __( 'Maximum number of items to be returned in result set.', 'code-snippet' ),
 				'type'              => 'integer',
 				'default'           => 50,
 				'minimum'           => 1,
@@ -593,14 +593,14 @@ class REST extends WP_REST_Controller {
 				'validate_callback' => 'rest_validate_request_arg',
 			],
 			'type'     => [
-				'description'       => __( 'Filter by snippet type.', 'edge-code-snippets' ),
+				'description'       => __( 'Filter by snippet type.', 'code-snippet' ),
 				'type'              => 'string',
 				'enum'              => [ 'php', 'js', 'css', 'html' ],
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
 			],
 			'active'   => [
-				'description'       => __( 'Filter by active status.', 'edge-code-snippets' ),
+				'description'       => __( 'Filter by active status.', 'code-snippet' ),
 				'type'              => 'boolean',
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'validate_callback' => 'rest_validate_request_arg',

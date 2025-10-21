@@ -7,7 +7,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 /* Menu Icon Sizing */
-#adminmenu .toplevel_page_edge-code-snippets .wp-menu-image img {
+#adminmenu .toplevel_page_code-snippet .wp-menu-image img {
   width: 20px !important;
   height: 20px !important;
   padding: 6px 0 !important;
@@ -2286,12 +2286,12 @@ body.ecs-resizing-editor * {
   height: 16px;
 }
 
-/* Page Header - Fixed Logo */
+/* Page Header - Tools page */
 .ecs-page-header {
   background: #fff;
   border-bottom: 1px solid #c3c4c7;
   padding: 20px 57px;
-  margin: -20px -20px 0 -20px;
+  margin: -15px -20px 0 -20px;
 }
 
 .ecs-header-content {
@@ -5336,7 +5336,7 @@ body.wp-admin #wpfooter {
 
 /* Main page wrapper */
 .ecs-snippets-page {
-  margin: -20px -20px 0 -20px;
+  margin: -20px 0 0 -20px;
   background: #f0f0f1;
 }
 

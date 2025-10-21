@@ -21,7 +21,7 @@ $slug = $is_new ? '' : esc_attr( $snippet['slug'] );
 $type = $is_new ? 'php' : esc_attr( $snippet['type'] );
 $code = $is_new ? '' : esc_textarea( $snippet['code'] );
 $active = $is_new ? false : (bool) $snippet['active'];
-$page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edit Snippet', 'edge-code-snippets' );
+$page_title = $is_new ? __( 'Add New Snippet', 'code-snippet' ) : __( 'Edit Snippet', 'code-snippet' );
 
 ?>
 <div class="wrap ecs-admin-page ecs-editor-page">
@@ -33,11 +33,11 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 				<span class="ecs-logo-text">WP Smart Code</span>
 			</div>
 			<div class="ecs-header-actions">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets' ) ); ?>" class="button">
-					<?php esc_html_e( '← Back to Snippets', 'edge-code-snippets' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet' ) ); ?>" class="button">
+					<?php esc_html_e( '← Back to Snippets', 'code-snippet' ); ?>
 				</a>
 				<button type="submit" form="ecs-snippet-editor-form" class="button button-primary button-large">
-					<?php echo $is_new ? esc_html__( 'Publish', 'edge-code-snippets' ) : esc_html__( 'Update', 'edge-code-snippets' ); ?>
+					<?php echo $is_new ? esc_html__( 'Publish', 'code-snippet' ) : esc_html__( 'Update', 'code-snippet' ); ?>
 				</button>
 			</div>
 		</div>
@@ -53,10 +53,10 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 			
 			switch ( $message_type ) {
 				case 'updated':
-					$message_text = __( 'Snippet updated successfully.', 'edge-code-snippets' );
+					$message_text = __( 'Snippet updated successfully.', 'code-snippet' );
 					break;
 				case 'created':
-					$message_text = __( 'Snippet created successfully.', 'edge-code-snippets' );
+					$message_text = __( 'Snippet created successfully.', 'code-snippet' );
 					break;
 			}
 			
@@ -65,7 +65,7 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 				<div class="notice notice-success is-dismissible ecs-editor-notice">
 					<p><?php echo esc_html( $message_text ); ?></p>
 					<button type="button" class="notice-dismiss">
-						<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'edge-code-snippets' ); ?></span>
+						<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'code-snippet' ); ?></span>
 					</button>
 				</div>
 				<?php
@@ -84,14 +84,14 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 					<div class="ecs-title-row">
 						<div class="ecs-title-field">
 							<label for="ecs-snippet-title" class="ecs-label">
-								<?php esc_html_e( 'Snippet Title', 'edge-code-snippets' ); ?>
+								<?php esc_html_e( 'Snippet Title', 'code-snippet' ); ?>
 							</label>
 							<input 
 								type="text" 
 								id="ecs-snippet-title" 
 								name="title" 
 								class="ecs-input ecs-input-large" 
-								placeholder="<?php esc_attr_e( 'Add title for snippet', 'edge-code-snippets' ); ?>"
+								placeholder="<?php esc_attr_e( 'Add title for snippet', 'code-snippet' ); ?>"
 								value="<?php echo esc_attr( $title ); ?>"
 								required
 							>
@@ -110,7 +110,7 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 								<span class="ecs-toggle-slider"></span>
 							</label>
 							<span class="ecs-toggle-label" id="ecs-status-text">
-								<?php echo $active ? esc_html__( 'Active', 'edge-code-snippets' ) : esc_html__( 'Inactive', 'edge-code-snippets' ); ?>
+								<?php echo $active ? esc_html__( 'Active', 'code-snippet' ) : esc_html__( 'Inactive', 'code-snippet' ); ?>
 							</span>
 						</div>
 					</div>
@@ -122,7 +122,7 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 			<div class="ecs-card ecs-card-code">
 				<div class="ecs-card-header">
 					<h3 class="ecs-card-title">
-						<?php esc_html_e( 'Code', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Code', 'code-snippet' ); ?>
 					</h3>
 					<div class="ecs-code-header-actions">
 						<select id="ecs-snippet-type" name="type" class="ecs-type-select">
@@ -141,7 +141,7 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 						id="ecs-snippet-code" 
 						name="code" 
 						class="ecs-code-editor" 
-						placeholder="<?php esc_attr_e( 'Enter your code here...', 'edge-code-snippets' ); ?>"
+						placeholder="<?php esc_attr_e( 'Enter your code here...', 'code-snippet' ); ?>"
 					><?php echo esc_textarea( $code ); ?></textarea>
 				</div>
 			</div>
@@ -150,12 +150,12 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 			<div class="ecs-card">
 				<div class="ecs-card-header">
 					<h3 class="ecs-card-title">
-						<?php esc_html_e( 'Insertion', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Insertion', 'code-snippet' ); ?>
 					</h3>
 				</div>
 				<div class="ecs-card-content">
 					<p class="ecs-card-description">
-						<?php esc_html_e( 'Choose "Auto Insert" if you want the snippet to be automatically executed in one of the locations available. In "Shortcode" mode, the snippet will only be executed where the shortcode is inserted.', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Choose "Auto Insert" if you want the snippet to be automatically executed in one of the locations available. In "Shortcode" mode, the snippet will only be executed where the shortcode is inserted.', 'code-snippet' ); ?>
 					</p>
 					
 					<?php
@@ -168,8 +168,8 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 							<input type="radio" name="mode" value="auto_insert" <?php checked( $current_mode, 'auto_insert' ); ?> class="ecs-radio-input">
 							<div class="ecs-radio-content">
 								<div class="ecs-radio-text">
-									<span class="ecs-radio-title"><?php esc_html_e( 'Auto Insert', 'edge-code-snippets' ); ?></span>
-									<span class="ecs-radio-description"><?php esc_html_e( 'Automatically execute the snippet in the selected location', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-radio-title"><?php esc_html_e( 'Auto Insert', 'code-snippet' ); ?></span>
+									<span class="ecs-radio-description"><?php esc_html_e( 'Automatically execute the snippet in the selected location', 'code-snippet' ); ?></span>
 								</div>
 							</div>
 						</label>
@@ -178,12 +178,15 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 							<input type="radio" name="mode" value="shortcode" <?php checked( $current_mode, 'shortcode' ); ?> <?php disabled( in_array( $type, [ 'css', 'js' ], true ) ); ?> class="ecs-radio-input">
 							<div class="ecs-radio-content">
 								<div class="ecs-radio-text">
-									<span class="ecs-radio-title"><?php esc_html_e( 'Shortcode', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-radio-title"><?php esc_html_e( 'Shortcode', 'code-snippet' ); ?></span>
 									<span class="ecs-radio-description">
 										<?php if ( in_array( $type, [ 'css', 'js' ], true ) ) : ?>
-											<?php esc_html_e( 'Not available for CSS/JavaScript snippets', 'edge-code-snippets' ); ?>
+											<?php esc_html_e( 'Not available for CSS/JavaScript snippets', 'code-snippet' ); ?>
 										<?php else : ?>
-											<?php esc_html_e( 'Only execute when shortcode is inserted: [ecs_snippet id="' . ( $is_new ? 'X' : $snippet_id ) . '"]', 'edge-code-snippets' ); ?>
+											<?php
+											/* translators: %s: snippet ID or X for new snippets */
+											echo esc_html( sprintf( __( 'Only execute when shortcode is inserted: [ecs_snippet id="%s"]', 'code-snippet' ), $is_new ? 'X' : $snippet_id ) );
+											?>
 										<?php endif; ?>
 									</span>
 								</div>
@@ -194,12 +197,12 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 					<!-- Location Settings -->
 					<div class="ecs-location-settings">
 						<label for="ecs-location-preset" class="ecs-label">
-							<?php esc_html_e( 'Location', 'edge-code-snippets' ); ?>
+							<?php esc_html_e( 'Location', 'code-snippet' ); ?>
 						</label>
 						<select id="ecs-location-preset" name="location_preset" class="ecs-input">
-							<option value="everywhere"><?php esc_html_e( 'Site Wide Header', 'edge-code-snippets' ); ?></option>
-							<option value="frontend"><?php esc_html_e( 'Frontend Only', 'edge-code-snippets' ); ?></option>
-							<option value="admin"><?php esc_html_e( 'Admin Area Only', 'edge-code-snippets' ); ?></option>
+							<option value="everywhere"><?php esc_html_e( 'Site Wide Header', 'code-snippet' ); ?></option>
+							<option value="frontend"><?php esc_html_e( 'Frontend Only', 'code-snippet' ); ?></option>
+							<option value="admin"><?php esc_html_e( 'Admin Area Only', 'code-snippet' ); ?></option>
 						</select>
 					</div>
 				</div>
@@ -209,12 +212,12 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 			<div class="ecs-card">
 				<div class="ecs-card-header">
 					<h3 class="ecs-card-title">
-						<?php esc_html_e( 'Device Type', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Device Type', 'code-snippet' ); ?>
 					</h3>
 				</div>
 				<div class="ecs-card-content">
 					<p class="ecs-card-description">
-						<?php esc_html_e( 'Limit where you want this snippet to be loaded by device type. By default, snippets are loaded on all devices.', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Limit where you want this snippet to be loaded by device type. By default, snippets are loaded on all devices.', 'code-snippet' ); ?>
 					</p>
 					
 					<div class="ecs-device-options">
@@ -222,7 +225,7 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 							<input type="radio" name="device_type" value="any" checked class="ecs-radio-input">
 							<div class="ecs-radio-content">
 								<div class="ecs-radio-text">
-									<span class="ecs-radio-title"><?php esc_html_e( 'Any device type', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-radio-title"><?php esc_html_e( 'Any device type', 'code-snippet' ); ?></span>
 								</div>
 							</div>
 						</label>
@@ -231,7 +234,7 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 							<input type="radio" name="device_type" value="desktop" class="ecs-radio-input">
 							<div class="ecs-radio-content">
 								<div class="ecs-radio-text">
-									<span class="ecs-radio-title"><?php esc_html_e( 'Desktop only', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-radio-title"><?php esc_html_e( 'Desktop only', 'code-snippet' ); ?></span>
 								</div>
 							</div>
 						</label>
@@ -240,7 +243,7 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 							<input type="radio" name="device_type" value="mobile" class="ecs-radio-input">
 							<div class="ecs-radio-content">
 								<div class="ecs-radio-text">
-									<span class="ecs-radio-title"><?php esc_html_e( 'Mobile only', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-radio-title"><?php esc_html_e( 'Mobile only', 'code-snippet' ); ?></span>
 								</div>
 							</div>
 						</label>
@@ -252,66 +255,66 @@ $page_title = $is_new ? __( 'Add New Snippet', 'edge-code-snippets' ) : __( 'Edi
 			<div class="ecs-card">
 				<div class="ecs-card-header">
 					<h3 class="ecs-card-title">
-						<?php esc_html_e( 'Smart Conditional Logic', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Smart Conditional Logic', 'code-snippet' ); ?>
 					</h3>
 				</div>
 				<div class="ecs-card-content">
 					<p class="ecs-card-description">
-						<?php esc_html_e( 'Using conditional logic you can limit the pages where you want the snippet to be auto-inserted.', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Using conditional logic you can limit the pages where you want the snippet to be auto-inserted.', 'code-snippet' ); ?>
 					</p>
 					
 					<div class="ecs-conditional-logic">
 						<input type="checkbox" id="ecs-enable-logic" name="enable_logic" class="ecs-logic-toggle">
 						<label for="ecs-enable-logic" class="ecs-logic-label">
-							<?php esc_html_e( 'Enable Logic', 'edge-code-snippets' ); ?>
+							<?php esc_html_e( 'Enable Logic', 'code-snippet' ); ?>
 						</label>
 					</div>
 
 					<div class="ecs-advanced-conditions" style="display: none;">
 						<div class="ecs-condition-group">
-							<h4 class="ecs-condition-title"><?php esc_html_e( 'Page Types', 'edge-code-snippets' ); ?></h4>
+							<h4 class="ecs-condition-title"><?php esc_html_e( 'Page Types', 'code-snippet' ); ?></h4>
 							<div class="ecs-checkbox-group">
 								<label class="ecs-checkbox-item">
 									<input type="checkbox" name="page_types[]" value="front_page" class="ecs-checkbox-input">
-									<span class="ecs-checkbox-text"><?php esc_html_e( 'Front Page', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-checkbox-text"><?php esc_html_e( 'Front Page', 'code-snippet' ); ?></span>
 								</label>
 								<label class="ecs-checkbox-item">
 									<input type="checkbox" name="page_types[]" value="home" class="ecs-checkbox-input">
-									<span class="ecs-checkbox-text"><?php esc_html_e( 'Blog Page', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-checkbox-text"><?php esc_html_e( 'Blog Page', 'code-snippet' ); ?></span>
 								</label>
 								<label class="ecs-checkbox-item">
 									<input type="checkbox" name="page_types[]" value="single" class="ecs-checkbox-input">
-									<span class="ecs-checkbox-text"><?php esc_html_e( 'Single Posts', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-checkbox-text"><?php esc_html_e( 'Single Posts', 'code-snippet' ); ?></span>
 								</label>
 								<label class="ecs-checkbox-item">
 									<input type="checkbox" name="page_types[]" value="page" class="ecs-checkbox-input">
-									<span class="ecs-checkbox-text"><?php esc_html_e( 'Pages', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-checkbox-text"><?php esc_html_e( 'Pages', 'code-snippet' ); ?></span>
 								</label>
 								<label class="ecs-checkbox-item">
 									<input type="checkbox" name="page_types[]" value="archive" class="ecs-checkbox-input">
-									<span class="ecs-checkbox-text"><?php esc_html_e( 'Archives', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-checkbox-text"><?php esc_html_e( 'Archives', 'code-snippet' ); ?></span>
 								</label>
 								<label class="ecs-checkbox-item">
 									<input type="checkbox" name="page_types[]" value="search" class="ecs-checkbox-input">
-									<span class="ecs-checkbox-text"><?php esc_html_e( 'Search Results', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-checkbox-text"><?php esc_html_e( 'Search Results', 'code-snippet' ); ?></span>
 								</label>
 							</div>
 						</div>
 
 						<div class="ecs-condition-group">
-							<h4 class="ecs-condition-title"><?php esc_html_e( 'Login Status', 'edge-code-snippets' ); ?></h4>
+							<h4 class="ecs-condition-title"><?php esc_html_e( 'Login Status', 'code-snippet' ); ?></h4>
 							<div class="ecs-radio-group">
 								<label class="ecs-radio-item">
 									<input type="radio" name="login_status" value="any" checked class="ecs-radio-input">
-									<span class="ecs-radio-text"><?php esc_html_e( 'Any', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-radio-text"><?php esc_html_e( 'Any', 'code-snippet' ); ?></span>
 								</label>
 								<label class="ecs-radio-item">
 									<input type="radio" name="login_status" value="logged_in" class="ecs-radio-input">
-									<span class="ecs-radio-text"><?php esc_html_e( 'Logged In', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-radio-text"><?php esc_html_e( 'Logged In', 'code-snippet' ); ?></span>
 								</label>
 								<label class="ecs-radio-item">
 									<input type="radio" name="login_status" value="logged_out" class="ecs-radio-input">
-									<span class="ecs-radio-text"><?php esc_html_e( 'Logged Out', 'edge-code-snippets' ); ?></span>
+									<span class="ecs-radio-text"><?php esc_html_e( 'Logged Out', 'code-snippet' ); ?></span>
 								</label>
 							</div>
 						</div>
@@ -332,10 +335,10 @@ jQuery(document).ready(function($) {
 	$('#ecs-snippet-active').on('change', function() {
 		const $statusText = $('#ecs-status-text');
 		if ($(this).is(':checked')) {
-			$statusText.text('<?php echo esc_js( __( 'Active', 'edge-code-snippets' ) ); ?>');
+			$statusText.text('<?php echo esc_js( __( 'Active', 'code-snippet' ) ); ?>');
 			$statusText.addClass('ecs-status-active');
 		} else {
-			$statusText.text('<?php echo esc_js( __( 'Inactive', 'edge-code-snippets' ) ); ?>');
+			$statusText.text('<?php echo esc_js( __( 'Inactive', 'code-snippet' ) ); ?>');
 			$statusText.removeClass('ecs-status-active');
 		}
 	});

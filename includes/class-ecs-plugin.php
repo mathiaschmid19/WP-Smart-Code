@@ -160,7 +160,7 @@ class Plugin {
 	 */
 	public function load_textdomain(): void {
 		load_plugin_textdomain(
-			'edge-code-snippets',
+			'code-snippet',
 			false,
 			dirname( ECS_BASENAME ) . '/languages'
 		);
@@ -330,10 +330,10 @@ class Plugin {
 
 		// Register the menu directly as a top-level menu
 		$page_hook = add_menu_page(
-			__( 'WP Smart Code', 'edge-code-snippets' ),
-			__( 'WP Smart Code', 'edge-code-snippets' ),
+			__( 'Smart Code', 'code-snippet' ),
+			__( 'Smart Code', 'code-snippet' ),
 			'manage_options',
-			'edge-code-snippets',
+			'code-snippet',
 			[ $this, 'render_admin_page' ],
 			'data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgNDAgNDgiIHdpZHRoPSI0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMCA5YzAtMi43NjE0MiAyLjIzODU4LTUgNS01aDEwYzIuNzYxNCAwIDUgMi4yMzg1OCA1IDV2OS44MTkyYy4wMDAyLjA2LjAwMDMuMTIwMy4wMDAzLjE4MDggMCAyLjc1NzUgMi4yMzIyIDQuOTkzNiA0Ljk4ODEgNWguMDExNiAxMGMyLjc2MTQgMCA1IDIuMjM4NiA1IDV2MTBjMCAyLjc2MTQtMi4yMzg2IDUtNSA1aC0xMGMtMi43NjE0IDAtNS0yLjIzODYtNS01di0xMGMwLS4wMTM5LjAwMDEtLjAyNzcuMDAwMi0uMDQxNi0uMDIyNC0yLjc0MjItMi4yNTIzLTQuOTU4NC00Ljk5OTktNC45NTg0LS4wMTI5IDAtLjAyNTggMC0uMDM4NyAwaC05Ljk2MTZjLTIuNzYxNDIgMC01LTIuMjM4Ni01LTV6IiBmaWxsPSIjZmZmIi8+PC9zdmc+', // Base64 encoded SVG logo
 			30 // Position after Comments
@@ -341,28 +341,28 @@ class Plugin {
 
 		// Add submenu for editor page
 		add_submenu_page(
-			'edge-code-snippets',
-			__( 'Add New Snippet', 'edge-code-snippets' ),
-			__( 'Add New', 'edge-code-snippets' ),
+			'code-snippet',
+			__( 'Add New Snippet', 'code-snippet' ),
+			__( 'Add New', 'code-snippet' ),
 			'manage_options',
-			'edge-code-snippets-editor',
+			'wp-smart-code-editor',
 			[ $this, 'render_editor_page' ]
 		);
 
 		// Add submenu for tools page
 		add_submenu_page(
-			'edge-code-snippets',
-			__( 'Tools', 'edge-code-snippets' ),
-			__( 'Tools', 'edge-code-snippets' ),
+			'code-snippet',
+			__( 'Tools', 'code-snippet' ),
+			__( 'Tools', 'code-snippet' ),
 			'manage_options',
-			'edge-code-snippets-tools',
+			'wp-smart-code-tools',
 			[ $this, 'render_tools_page' ]
 		);
 
 		// Add hidden submenu for database fix page
 		add_submenu_page(
 			'',
-			__( 'Fix Database', 'edge-code-snippets' ),
+			__( 'Fix Database', 'code-snippet' ),
 			'',
 			'manage_options',
 			'ecs-fix-database',
@@ -380,7 +380,7 @@ class Plugin {
 	 */
 	public function initialize_admin_assets( string $hook ): void {
 		// Only load on our plugin pages
-		if ( 'toplevel_page_edge-code-snippets' !== $hook && 'wp-smart-code_page_edge-code-snippets-editor' !== $hook && 'wp-smart-code_page_edge-code-snippets-tools' !== $hook ) {
+		if ( 'toplevel_page_code-snippet' !== $hook && 'smart-code_page_wp-smart-code-editor' !== $hook && 'smart-code_page_wp-smart-code-tools' !== $hook ) {
 			return;
 		}
 
@@ -399,7 +399,7 @@ class Plugin {
 		wp_enqueue_script( 'wp-api-fetch' );
 
 		// Enqueue appropriate JavaScript based on page
-		if ( 'wp-smart-code_page_edge-code-snippets-editor' === $hook ) {
+		if ( 'smart-code_page_wp-smart-code-editor' === $hook ) {
 			// Enqueue CodeMirror from WordPress core with proper settings
 			$codemirror_settings = wp_enqueue_code_editor(
 				array(
@@ -477,7 +477,7 @@ class Plugin {
 				[
 					'nonce'   => wp_create_nonce( 'wp_rest' ),
 					'restUrl' => rest_url(),
-					'listUrl' => admin_url( 'admin.php?page=edge-code-snippets' ),
+					'listUrl' => admin_url( 'admin.php?page=code-snippet' ),
 				]
 			);
 
@@ -505,9 +505,9 @@ class Plugin {
 					'restUrl'  => rest_url(),
 					'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 					'i18n'     => [
-						'confirmDelete' => __( 'Are you sure you want to delete this snippet?', 'edge-code-snippets' ),
-						'loading'       => __( 'Loading...', 'edge-code-snippets' ),
-						'error'         => __( 'An error occurred.', 'edge-code-snippets' ),
+						'confirmDelete' => __( 'Are you sure you want to delete this snippet?', 'code-snippet' ),
+						'loading'       => __( 'Loading...', 'code-snippet' ),
+						'error'         => __( 'An error occurred.', 'code-snippet' ),
 					],
 				]
 			);
@@ -521,7 +521,7 @@ class Plugin {
 	 */
 	public function handle_single_actions(): void {
 		// Only run on our plugin page
-		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'edge-code-snippets' ) {
+		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'code-snippet' ) {
 			return;
 		}
 
@@ -536,25 +536,25 @@ class Plugin {
 
 		// Verify user capability
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'code-snippet' ) );
 		}
 
 		// Verify nonce
 		if ( ! wp_verify_nonce( $nonce, $action . '_snippet_' . $id ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'Security check failed.', 'code-snippet' ) );
 		}
 
 		// Validate action
 		$allowed_actions = [ 'toggle', 'trash', 'restore', 'delete' ];
 		if ( ! in_array( $action, $allowed_actions, true ) ) {
-			wp_die( esc_html__( 'Invalid action.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'Invalid action.', 'code-snippet' ) );
 		}
 
 		// Verify snippet exists
 		$snippet = $this->snippet->get( $id );
 		if ( ! $snippet ) {
-			add_settings_error( 'ecs_messages', 'ecs_message', __( 'Snippet not found.', 'edge-code-snippets' ), 'error' );
-			wp_safe_redirect( admin_url( 'admin.php?page=edge-code-snippets' ) );
+			add_settings_error( 'ecs_messages', 'ecs_message', __( 'Snippet not found.', 'code-snippet' ), 'error' );
+			wp_safe_redirect( admin_url( 'admin.php?page=code-snippet' ) );
 			exit;
 		}
 
@@ -564,17 +564,18 @@ class Plugin {
 		
 		// Preserve current view if set
 		$current_view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : '';
-		$redirect_url = admin_url( 'admin.php?page=edge-code-snippets' );
+		$redirect_url = admin_url( 'admin.php?page=code-snippet' );
 
 		switch ( $action ) {
 			case 'toggle':
 				$new_status = $snippet['active'] ? 0 : 1;
 				$result = $this->snippet->update( $id, [ 'active' => $new_status ] );
 				if ( $result !== false ) {
-					$status_text = $new_status ? __( 'activated', 'edge-code-snippets' ) : __( 'deactivated', 'edge-code-snippets' );
-					$message = sprintf( __( 'Snippet %s successfully.', 'edge-code-snippets' ), $status_text );
+					$status_text = $new_status ? __( 'activated', 'code-snippet' ) : __( 'deactivated', 'code-snippet' );
+					/* translators: %s: status text (activated or deactivated) */
+					$message = sprintf( __( 'Snippet %s successfully.', 'code-snippet' ), $status_text );
 				} else {
-					$message = __( 'Failed to update snippet status.', 'edge-code-snippets' );
+					$message = __( 'Failed to update snippet status.', 'code-snippet' );
 				}
 				// Preserve current view
 				if ( $current_view ) {
@@ -584,7 +585,7 @@ class Plugin {
 
 			case 'trash':
 				$result = $this->snippet->soft_delete( $id );
-				$message = $result ? __( 'Snippet moved to trash.', 'edge-code-snippets' ) : __( 'Failed to move snippet to trash.', 'edge-code-snippets' );
+				$message = $result ? __( 'Snippet moved to trash.', 'code-snippet' ) : __( 'Failed to move snippet to trash.', 'code-snippet' );
 				// Preserve current view
 				if ( $current_view ) {
 					$redirect_url = add_query_arg( 'view', $current_view, $redirect_url );
@@ -593,13 +594,13 @@ class Plugin {
 
 			case 'restore':
 				$result = $this->snippet->restore( $id );
-				$message = $result ? __( 'Snippet restored successfully.', 'edge-code-snippets' ) : __( 'Failed to restore snippet.', 'edge-code-snippets' );
+				$message = $result ? __( 'Snippet restored successfully.', 'code-snippet' ) : __( 'Failed to restore snippet.', 'code-snippet' );
 				$redirect_url = add_query_arg( 'view', 'trash', $redirect_url );
 				break;
 
 			case 'delete':
 				$result = $this->snippet->delete( $id );
-				$message = $result ? __( 'Snippet deleted permanently.', 'edge-code-snippets' ) : __( 'Failed to delete snippet.', 'edge-code-snippets' );
+				$message = $result ? __( 'Snippet deleted permanently.', 'code-snippet' ) : __( 'Failed to delete snippet.', 'code-snippet' );
 				$redirect_url = add_query_arg( 'view', 'trash', $redirect_url );
 				break;
 		}
@@ -624,11 +625,11 @@ class Plugin {
 	public function render_admin_page(): void {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'code-snippet' ) );
 		}
 
 		if ( ! $this->snippet ) {
-			wp_die( esc_html__( 'Plugin not properly initialized.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'Plugin not properly initialized.', 'code-snippet' ) );
 		}
 
 		// Display transient admin notice if exists
@@ -662,11 +663,11 @@ class Plugin {
 	public function render_editor_page(): void {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'code-snippet' ) );
 		}
 
 		if ( ! $this->snippet ) {
-			wp_die( esc_html__( 'Plugin not properly initialized.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'Plugin not properly initialized.', 'code-snippet' ) );
 		}
 
 		// Get snippet if editing
@@ -676,7 +677,7 @@ class Plugin {
 			$snippet = $this->snippet->get( $snippet_id );
 			
 			if ( ! $snippet ) {
-				wp_die( esc_html__( 'Snippet not found.', 'edge-code-snippets' ) );
+				wp_die( esc_html__( 'Snippet not found.', 'code-snippet' ) );
 			}
 		}
 
@@ -775,7 +776,7 @@ class Plugin {
 	public function render_tools_page(): void {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'code-snippet' ) );
 		}
 
 		// Make admin instance available in template
@@ -793,7 +794,7 @@ class Plugin {
 	public function render_fix_database_page(): void {
 		// Check user capabilities
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'edge-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'code-snippet' ) );
 		}
 
 		global $wpdb;
@@ -824,7 +825,7 @@ class Plugin {
 				);
 
 				if ( $result === false ) {
-					$errors[] = __( 'Failed to add mode column: ', 'edge-code-snippets' ) . $wpdb->last_error;
+					$errors[] = __( 'Failed to add mode column: ', 'code-snippet' ) . $wpdb->last_error;
 				} else {
 					$fixed = true;
 
@@ -839,7 +840,7 @@ class Plugin {
 					delete_transient( 'ecs_db_check_dismissed' );
 				}
 			} else {
-				$errors[] = __( 'Mode column already exists.', 'edge-code-snippets' );
+				$errors[] = __( 'Mode column already exists.', 'code-snippet' );
 			}
 		}
 
@@ -856,28 +857,28 @@ class Plugin {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Fix Database', 'edge-code-snippets' ); ?></h1>
+			<h1><?php esc_html_e( 'Fix Database', 'code-snippet' ); ?></h1>
 
 			<?php if ( $fixed ) : ?>
 				<div class="notice notice-success">
 					<p>
-						<strong><?php esc_html_e( 'Success!', 'edge-code-snippets' ); ?></strong>
-						<?php esc_html_e( 'The database has been fixed. You can now create snippets.', 'edge-code-snippets' ); ?>
+						<strong><?php esc_html_e( 'Success!', 'code-snippet' ); ?></strong>
+						<?php esc_html_e( 'The database has been fixed. You can now create snippets.', 'code-snippet' ); ?>
 					</p>
 				</div>
 				<p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-editor' ) ); ?>" class="button button-primary">
-						<?php esc_html_e( 'Create a Snippet', 'edge-code-snippets' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-editor' ) ); ?>" class="button button-primary">
+						<?php esc_html_e( 'Create a Snippet', 'code-snippet' ); ?>
 					</a>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets' ) ); ?>" class="button button-secondary">
-						<?php esc_html_e( 'View All Snippets', 'edge-code-snippets' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet' ) ); ?>" class="button button-secondary">
+						<?php esc_html_e( 'View All Snippets', 'code-snippet' ); ?>
 					</a>
 				</p>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $errors ) ) : ?>
 				<div class="notice notice-error">
-					<p><strong><?php esc_html_e( 'Errors:', 'edge-code-snippets' ); ?></strong></p>
+					<p><strong><?php esc_html_e( 'Errors:', 'code-snippet' ); ?></strong></p>
 					<ul>
 						<?php foreach ( $errors as $error ) : ?>
 							<li><?php echo esc_html( $error ); ?></li>
@@ -889,10 +890,10 @@ class Plugin {
 			<?php if ( ! $has_mode && ! $fixed ) : ?>
 				<div class="notice notice-warning">
 					<p>
-						<strong><?php esc_html_e( 'Database Update Required', 'edge-code-snippets' ); ?></strong>
+						<strong><?php esc_html_e( 'Database Update Required', 'code-snippet' ); ?></strong>
 					</p>
 					<p>
-						<?php esc_html_e( 'The database table is missing the "mode" column. Click the button below to fix this automatically.', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'The database table is missing the "mode" column. Click the button below to fix this automatically.', 'code-snippet' ); ?>
 					</p>
 				</div>
 
@@ -900,27 +901,27 @@ class Plugin {
 					<?php wp_nonce_field( 'ecs_fix_database', 'ecs_fix_nonce' ); ?>
 					<p>
 						<button type="submit" name="ecs_fix_database" class="button button-primary button-large">
-							<?php esc_html_e( 'Fix Database Now', 'edge-code-snippets' ); ?>
+							<?php esc_html_e( 'Fix Database Now', 'code-snippet' ); ?>
 						</button>
 					</p>
 				</form>
 			<?php elseif ( $has_mode && ! $fixed ) : ?>
 				<div class="notice notice-success">
 					<p>
-						<strong><?php esc_html_e( 'No issues found!', 'edge-code-snippets' ); ?></strong>
-						<?php esc_html_e( 'The database is up to date.', 'edge-code-snippets' ); ?>
+						<strong><?php esc_html_e( 'No issues found!', 'code-snippet' ); ?></strong>
+						<?php esc_html_e( 'The database is up to date.', 'code-snippet' ); ?>
 					</p>
 				</div>
 			<?php endif; ?>
 
-			<h2><?php esc_html_e( 'Current Table Structure', 'edge-code-snippets' ); ?></h2>
+			<h2><?php esc_html_e( 'Current Table Structure', 'code-snippet' ); ?></h2>
 			<table class="widefat">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Column Name', 'edge-code-snippets' ); ?></th>
-						<th><?php esc_html_e( 'Type', 'edge-code-snippets' ); ?></th>
-						<th><?php esc_html_e( 'Null', 'edge-code-snippets' ); ?></th>
-						<th><?php esc_html_e( 'Default', 'edge-code-snippets' ); ?></th>
+						<th><?php esc_html_e( 'Column Name', 'code-snippet' ); ?></th>
+						<th><?php esc_html_e( 'Type', 'code-snippet' ); ?></th>
+						<th><?php esc_html_e( 'Null', 'code-snippet' ); ?></th>
+						<th><?php esc_html_e( 'Default', 'code-snippet' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -936,8 +937,8 @@ class Plugin {
 			</table>
 
 			<p>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets' ) ); ?>" class="button">
-					<?php esc_html_e( 'Back to Snippets', 'edge-code-snippets' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet' ) ); ?>" class="button">
+					<?php esc_html_e( 'Back to Snippets', 'code-snippet' ); ?>
 				</a>
 			</p>
 		</div>
@@ -990,21 +991,21 @@ class Plugin {
 			?>
 			<div class="notice notice-error">
 				<p>
-					<strong><?php esc_html_e( 'WP Smart Code - Database Update Required', 'edge-code-snippets' ); ?></strong>
+					<strong><?php esc_html_e( 'WP Smart Code - Database Update Required', 'code-snippet' ); ?></strong>
 				</p>
 				<p>
-					<?php esc_html_e( 'The database table is missing the "mode" column. This will cause errors when creating snippets.', 'edge-code-snippets' ); ?>
+					<?php esc_html_e( 'The database table is missing the "mode" column. This will cause errors when creating snippets.', 'code-snippet' ); ?>
 				</p>
 				<p>
-					<strong><?php esc_html_e( 'Solution:', 'edge-code-snippets' ); ?></strong>
-					<?php esc_html_e( 'Please deactivate and reactivate the plugin, or click the button below to fix automatically:', 'edge-code-snippets' ); ?>
+					<strong><?php esc_html_e( 'Solution:', 'code-snippet' ); ?></strong>
+					<?php esc_html_e( 'Please deactivate and reactivate the plugin, or click the button below to fix automatically:', 'code-snippet' ); ?>
 				</p>
 				<p>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=ecs-fix-database' ) ); ?>" class="button button-primary">
-						<?php esc_html_e( 'Fix Database Now', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Fix Database Now', 'code-snippet' ); ?>
 					</a>
 					<a href="<?php echo esc_url( add_query_arg( 'ecs_dismiss_db_notice', '1' ) ); ?>" class="button button-secondary">
-						<?php esc_html_e( 'Dismiss (I will fix it manually)', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Dismiss (I will fix it manually)', 'code-snippet' ); ?>
 					</a>
 				</p>
 			</div>
@@ -1028,9 +1029,9 @@ class Plugin {
 		// Only customize footer on our plugin pages
 		$current_screen = get_current_screen();
 		if ( ! $current_screen || ! in_array( $current_screen->id, [
-			'toplevel_page_edge-code-snippets',
-			'wp-smart-code_page_edge-code-snippets-editor',
-			'wp-smart-code_page_edge-code-snippets-tools'
+			'toplevel_page_code-snippet',
+			'smart-code_page_wp-smart-code-editor',
+			'smart-code_page_wp-smart-code-tools'
 		], true ) ) {
 			return;
 		}
@@ -1060,7 +1061,7 @@ class Plugin {
 						'<p id="ecs-footer-text">' +
 						'<strong>WP Smart Code</strong> v<?php echo esc_js( $plugin_version ); ?> | ' +
 						'© <?php echo esc_js( $current_year ); ?> <a href="https://amineouhannou.com" target="_blank">Amine Ouhannou</a> | ' +
-						'<a href="https://github.com/mathiaschmid19/edge-code-snippets" target="_blank"><?php esc_html_e( 'GitHub', 'edge-code-snippets' ); ?></a>' +
+						'<a href="https://github.com/mathiaschmid19/wp-smart-code" target="_blank"><?php esc_html_e( 'GitHub', 'code-snippet' ); ?></a>' +
 						'</p>'
 					);
 					

@@ -163,11 +163,11 @@ class Snippets_List_Table extends \WP_List_Table {
 	public function get_columns(): array {
 		$columns = [
 			'cb'     => '<input type="checkbox" />',
-			'title'  => __( 'Title', 'edge-code-snippets' ),
-			'type'   => __( 'Type', 'edge-code-snippets' ),
-			'mode'   => __( 'Mode', 'edge-code-snippets' ),
-			'author' => __( 'Author', 'edge-code-snippets' ),
-			'active' => __( 'Active', 'edge-code-snippets' ),
+			'title'  => __( 'Title', 'code-snippet' ),
+			'type'   => __( 'Type', 'code-snippet' ),
+			'mode'   => __( 'Mode', 'code-snippet' ),
+			'author' => __( 'Author', 'code-snippet' ),
+			'active' => __( 'Active', 'code-snippet' ),
 		];
 
 		return apply_filters( 'ecs_snippets_list_columns', $columns );
@@ -209,13 +209,13 @@ class Snippets_List_Table extends \WP_List_Table {
 
 			case 'mode':
 				$mode = $item['mode'] ?? 'auto_insert';
-				$mode_label = $mode === 'shortcode' ? __( 'Shortcode', 'edge-code-snippets' ) : __( 'Auto Insert', 'edge-code-snippets' );
+				$mode_label = $mode === 'shortcode' ? __( 'Shortcode', 'code-snippet' ) : __( 'Auto Insert', 'code-snippet' );
 				$mode_class = $mode === 'shortcode' ? 'mode-shortcode' : 'mode-auto-insert';
 				return '<span class="badge ' . esc_attr( $mode_class ) . '">' . esc_html( $mode_label ) . '</span>';
 
 			case 'author':
 				$author = get_user_by( 'ID', (int) $item['author_id'] );
-				return $author ? esc_html( $author->display_name ) : __( 'Unknown', 'edge-code-snippets' );
+				return $author ? esc_html( $author->display_name ) : __( 'Unknown', 'code-snippet' );
 
 			case 'active':
 				$snippet_id = (int) $item['id'];
@@ -268,34 +268,34 @@ class Snippets_List_Table extends \WP_List_Table {
 			$actions['restore'] = sprintf(
 				'<a href="%s">%s</a>',
 				wp_nonce_url(
-					admin_url( 'admin.php?page=edge-code-snippets&action=restore&id=' . $snippet_id ),
+					admin_url( 'admin.php?page=wp-smart-code&action=restore&id=' . $snippet_id ),
 					'restore_snippet_' . $snippet_id
 				),
-				__( 'Restore', 'edge-code-snippets' )
+				__( 'Restore', 'code-snippet' )
 			);
 			$actions['delete'] = sprintf(
 				'<a href="%s" class="delete">%s</a>',
 				wp_nonce_url(
-					admin_url( 'admin.php?page=edge-code-snippets&action=delete&id=' . $snippet_id ),
+					admin_url( 'admin.php?page=wp-smart-code&action=delete&id=' . $snippet_id ),
 					'delete_snippet_' . $snippet_id
 				),
-				__( 'Delete Permanently', 'edge-code-snippets' )
+				__( 'Delete Permanently', 'code-snippet' )
 			);
 		} else {
 			// Normal view actions.
 			$actions['edit'] = sprintf(
 				'<a href="%s">%s</a>',
-				admin_url( 'admin.php?page=edge-code-snippets-editor&snippet_id=' . $snippet_id ),
-				__( 'Edit', 'edge-code-snippets' )
+				admin_url( 'admin.php?page=wp-smart-code-editor&snippet_id=' . $snippet_id ),
+				__( 'Edit', 'code-snippet' )
 			);
 
 			// Toggle action.
 			$active = (int) $item['active'];
-			$toggle_text = $active ? __( 'Deactivate', 'edge-code-snippets' ) : __( 'Activate', 'edge-code-snippets' );
+			$toggle_text = $active ? __( 'Deactivate', 'code-snippet' ) : __( 'Activate', 'code-snippet' );
 			$actions['toggle'] = sprintf(
 				'<a href="%s">%s</a>',
 				wp_nonce_url(
-					admin_url( 'admin.php?page=edge-code-snippets&action=toggle&id=' . $snippet_id ),
+					admin_url( 'admin.php?page=wp-smart-code&action=toggle&id=' . $snippet_id ),
 					'toggle_snippet_' . $snippet_id
 				),
 				$toggle_text
@@ -304,10 +304,10 @@ class Snippets_List_Table extends \WP_List_Table {
 			$actions['trash'] = sprintf(
 				'<a href="%s" class="delete">%s</a>',
 				wp_nonce_url(
-					admin_url( 'admin.php?page=edge-code-snippets&action=trash&id=' . $snippet_id ),
+					admin_url( 'admin.php?page=wp-smart-code&action=trash&id=' . $snippet_id ),
 					'trash_snippet_' . $snippet_id
 				),
-				__( 'Trash', 'edge-code-snippets' )
+				__( 'Trash', 'code-snippet' )
 			);
 		}
 
@@ -325,12 +325,12 @@ class Snippets_List_Table extends \WP_List_Table {
 		$actions = [];
 
 		if ( $this->current_view === 'trash' ) {
-			$actions['restore'] = __( 'Restore', 'edge-code-snippets' );
-			$actions['delete']  = __( 'Delete Permanently', 'edge-code-snippets' );
+			$actions['restore'] = __( 'Restore', 'code-snippet' );
+			$actions['delete']  = __( 'Delete Permanently', 'code-snippet' );
 		} else {
-			$actions['activate']   = __( 'Activate', 'edge-code-snippets' );
-			$actions['deactivate'] = __( 'Deactivate', 'edge-code-snippets' );
-			$actions['trash']      = __( 'Move to Trash', 'edge-code-snippets' );
+			$actions['activate']   = __( 'Activate', 'code-snippet' );
+			$actions['deactivate'] = __( 'Deactivate', 'code-snippet' );
+			$actions['trash']      = __( 'Move to Trash', 'code-snippet' );
 		}
 
 		return apply_filters( 'ecs_bulk_actions', $actions, $this->current_view );
@@ -363,7 +363,7 @@ class Snippets_List_Table extends \WP_List_Table {
 					'snippet_ids' => $snippet_ids,
 					'ip' => $this->get_client_ip()
 				] );
-				wp_die( esc_html__( 'Security check failed.', 'edge-code-snippets' ) );
+				wp_die( esc_html__( 'Security check failed.', 'code-snippet' ) );
 			}
 
 			// Check permissions.
@@ -375,14 +375,14 @@ class Snippets_List_Table extends \WP_List_Table {
 					'snippet_ids' => $snippet_ids,
 					'ip' => $this->get_client_ip()
 				] );
-				wp_die( esc_html__( 'You do not have permission to perform this action.', 'edge-code-snippets' ) );
+				wp_die( esc_html__( 'You do not have permission to perform this action.', 'code-snippet' ) );
 			}
 
 			// Validate action
 			$allowed_actions = [ 'activate', 'deactivate', 'trash', 'restore', 'delete' ];
 			if ( ! in_array( $action, $allowed_actions, true ) ) {
 				$this->log_error( 'Bulk action failed: Invalid action', [ 'action' => $action, 'allowed_actions' => $allowed_actions ] );
-				add_settings_error( 'ecs_messages', 'ecs_message', __( 'Invalid action.', 'edge-code-snippets' ), 'error' );
+				add_settings_error( 'ecs_messages', 'ecs_message', __( 'Invalid action.', 'code-snippet' ), 'error' );
 				wp_safe_redirect( remove_query_arg( [ 'action', 'action2', 'snippet', '_wpnonce', '_wp_http_referer' ] ) );
 				exit;
 			}
@@ -442,21 +442,21 @@ class Snippets_List_Table extends \WP_List_Table {
 			if ( $updated > 0 ) {
 				$message = sprintf(
 					/* translators: %d: Number of updated snippets */
-					_n( '%d snippet updated.', '%d snippets updated.', $updated, 'edge-code-snippets' ),
+					_n( '%d snippet updated.', '%d snippets updated.', $updated, 'code-snippet' ),
 					$updated
 				);
 
 				if ( $failed > 0 ) {
 					$message .= ' ' . sprintf(
 						/* translators: %d: Number of failed snippets */
-						_n( '%d snippet failed.', '%d snippets failed.', $failed, 'edge-code-snippets' ),
+						_n( '%d snippet failed.', '%d snippets failed.', $failed, 'code-snippet' ),
 						$failed
 					);
 				}
 
 				add_settings_error( 'ecs_messages', 'ecs_message', $message, 'success' );
 			} elseif ( $failed > 0 ) {
-				add_settings_error( 'ecs_messages', 'ecs_message', __( 'Failed to update snippets. Please try again.', 'edge-code-snippets' ), 'error' );
+				add_settings_error( 'ecs_messages', 'ecs_message', __( 'Failed to update snippets. Please try again.', 'code-snippet' ), 'error' );
 			}
 
 			// Redirect to remove query parameters.
@@ -474,7 +474,7 @@ class Snippets_List_Table extends \WP_List_Table {
 				'action' => $action ?? 'unknown',
 				'snippet_ids' => $snippet_ids ?? []
 			] );
-			add_settings_error( 'ecs_messages', 'ecs_message', __( 'An unexpected error occurred. Please try again.', 'edge-code-snippets' ), 'error' );
+			add_settings_error( 'ecs_messages', 'ecs_message', __( 'An unexpected error occurred. Please try again.', 'code-snippet' ), 'error' );
 			wp_safe_redirect( remove_query_arg( [ 'action', 'action2', 'snippet', '_wpnonce', '_wp_http_referer' ] ) );
 			exit;
 		}
@@ -513,9 +513,9 @@ class Snippets_List_Table extends \WP_List_Table {
 		$class = ( $current === 'all' ) ? ' class="current"' : '';
 		$views['all'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-			admin_url( 'admin.php?page=edge-code-snippets' . $type_filter ),
+			admin_url( 'admin.php?page=wp-smart-code' . $type_filter ),
 			$class,
-			__( 'All', 'edge-code-snippets' ),
+			__( 'All', 'code-snippet' ),
 			$all_count
 		);
 
@@ -523,9 +523,9 @@ class Snippets_List_Table extends \WP_List_Table {
 		$class = ( $current === 'active' ) ? ' class="current"' : '';
 		$views['active'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-			admin_url( 'admin.php?page=edge-code-snippets&view=active' . $type_filter ),
+			admin_url( 'admin.php?page=wp-smart-code&view=active' . $type_filter ),
 			$class,
-			__( 'Active', 'edge-code-snippets' ),
+			__( 'Active', 'code-snippet' ),
 			$active_count
 		);
 
@@ -533,9 +533,9 @@ class Snippets_List_Table extends \WP_List_Table {
 		$class = ( $current === 'inactive' ) ? ' class="current"' : '';
 		$views['inactive'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-			admin_url( 'admin.php?page=edge-code-snippets&view=inactive' . $type_filter ),
+			admin_url( 'admin.php?page=wp-smart-code&view=inactive' . $type_filter ),
 			$class,
-			__( 'Inactive', 'edge-code-snippets' ),
+			__( 'Inactive', 'code-snippet' ),
 			$inactive_count
 		);
 
@@ -543,9 +543,9 @@ class Snippets_List_Table extends \WP_List_Table {
 		$class = ( $current === 'trash' ) ? ' class="current"' : '';
 		$views['trash'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-			admin_url( 'admin.php?page=edge-code-snippets&view=trash' . $type_filter ),
+			admin_url( 'admin.php?page=wp-smart-code&view=trash' . $type_filter ),
 			$class,
-			__( 'Trash', 'edge-code-snippets' ),
+			__( 'Trash', 'code-snippet' ),
 			$trash_count
 		);
 
@@ -594,9 +594,9 @@ class Snippets_List_Table extends \WP_List_Table {
 	 */
 	public function no_items(): void {
 		if ( ! empty( $_REQUEST['s'] ) ) {
-			esc_html_e( 'No snippets found.', 'edge-code-snippets' );
+			esc_html_e( 'No snippets found.', 'code-snippet' );
 		} else {
-			esc_html_e( 'No snippets available.', 'edge-code-snippets' );
+			esc_html_e( 'No snippets available.', 'code-snippet' );
 		}
 	}
 

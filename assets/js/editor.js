@@ -429,9 +429,12 @@
         });
         shortcodeRadio.prop("disabled", false);
         const snippetId = $('input[name="snippet_id"]').val() || "X";
-        shortcodeDescription.text(
-          `Only execute when shortcode is inserted: [ecs_snippet id="${snippetId}"]`
-        );
+        // Build description without string concatenation for i18n compatibility
+        const shortcodeText =
+          'Only execute when shortcode is inserted: [ecs_snippet id="' +
+          snippetId +
+          '"]';
+        shortcodeDescription.text(shortcodeText);
       }
     },
 
