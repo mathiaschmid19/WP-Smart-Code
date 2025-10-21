@@ -36,9 +36,9 @@ $html_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE type = 'ht
 ?>
 <div class="ecs-tools-panel">
 	<div class="ecs-tools-header">
-		<h2><?php esc_html_e( 'System Information', 'edge-code-snippets' ); ?></h2>
+		<h2><?php esc_html_e( 'System Information', 'code-snippet' ); ?></h2>
 		<p class="description">
-			<?php esc_html_e( 'View system information and plugin statistics for troubleshooting.', 'edge-code-snippets' ); ?>
+			<?php esc_html_e( 'View system information and plugin statistics for troubleshooting.', 'code-snippet' ); ?>
 		</p>
 	</div>
 
@@ -46,20 +46,20 @@ $html_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE type = 'ht
 		<!-- Plugin Info -->
 		<div class="ecs-info-section">
 			<h3>
-				<?php esc_html_e( 'Plugin Information', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'Plugin Information', 'code-snippet' ); ?>
 			</h3>
 			<table class="ecs-info-table">
 				<tr>
-					<th><?php esc_html_e( 'Plugin Version:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Plugin Version:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( $plugin_version ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Total Snippets:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Total Snippets:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( $total_snippets ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Database Size:', 'edge-code-snippets' ); ?></th>
-					<td><?php echo $db_size ? esc_html( size_format( $db_size ) ) : esc_html__( 'N/A', 'edge-code-snippets' ); ?></td>
+					<th><?php esc_html_e( 'Database Size:', 'code-snippet' ); ?></th>
+					<td><?php echo $db_size ? esc_html( size_format( $db_size ) ) : esc_html__( 'N/A', 'code-snippet' ); ?></td>
 				</tr>
 			</table>
 		</div>
@@ -67,23 +67,23 @@ $html_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE type = 'ht
 		<!-- Snippet Statistics -->
 		<div class="ecs-info-section">
 			<h3>
-				<?php esc_html_e( 'Snippet Statistics', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'Snippet Statistics', 'code-snippet' ); ?>
 			</h3>
 			<table class="ecs-info-table">
 				<tr>
-					<th><?php esc_html_e( 'PHP Snippets:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'PHP Snippets:', 'code-snippet' ); ?></th>
 					<td><span class="ecs-badge ecs-badge-php"><?php echo esc_html( $php_count ); ?></span></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'JavaScript Snippets:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'JavaScript Snippets:', 'code-snippet' ); ?></th>
 					<td><span class="ecs-badge ecs-badge-js"><?php echo esc_html( $js_count ); ?></span></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'CSS Snippets:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'CSS Snippets:', 'code-snippet' ); ?></th>
 					<td><span class="ecs-badge ecs-badge-css"><?php echo esc_html( $css_count ); ?></span></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'HTML Snippets:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'HTML Snippets:', 'code-snippet' ); ?></th>
 					<td><span class="ecs-badge ecs-badge-html"><?php echo esc_html( $html_count ); ?></span></td>
 				</tr>
 			</table>
@@ -92,19 +92,19 @@ $html_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE type = 'ht
 		<!-- WordPress Environment -->
 		<div class="ecs-info-section">
 			<h3>
-				<?php esc_html_e( 'WordPress Environment', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'WordPress Environment', 'code-snippet' ); ?>
 			</h3>
 			<table class="ecs-info-table">
 				<tr>
-					<th><?php esc_html_e( 'WordPress Version:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'WordPress Version:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( $wp_version ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Active Theme:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Active Theme:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( $active_theme->get( 'Name' ) . ' ' . $active_theme->get( 'Version' ) ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Site URL:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Site URL:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( get_site_url() ); ?></td>
 				</tr>
 			</table>
@@ -113,27 +113,27 @@ $html_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE type = 'ht
 		<!-- Server Environment -->
 		<div class="ecs-info-section">
 			<h3>
-				<?php esc_html_e( 'Server Environment', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'Server Environment', 'code-snippet' ); ?>
 			</h3>
 			<table class="ecs-info-table">
 				<tr>
-					<th><?php esc_html_e( 'PHP Version:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'PHP Version:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( $php_version ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Server Software:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Server Software:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( $server_software ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'PHP Memory Limit:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'PHP Memory Limit:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( $memory_limit ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Max Upload Size:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Max Upload Size:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( size_format( $max_upload_size ) ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Max Execution Time:', 'edge-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Max Execution Time:', 'code-snippet' ); ?></th>
 					<td><?php echo esc_html( $time_limit . 's' ); ?></td>
 				</tr>
 			</table>
@@ -142,7 +142,7 @@ $html_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE type = 'ht
 		<!-- Copy System Info -->
 		<div class="ecs-form-actions">
 			<button type="button" class="button button-secondary button-large" id="ecs-copy-system-info">
-				<?php esc_html_e( 'Copy System Info', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'Copy System Info', 'code-snippet' ); ?>
 			</button>
 		</div>
 

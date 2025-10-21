@@ -187,7 +187,7 @@ class Shortcode {
 			// Title
 			$title = esc_html( $snippet['title'] );
 			if ( '1' === $atts['link'] ) {
-				$edit_url = admin_url( 'admin.php?page=edge-code-snippets-editor&id=' . $snippet['id'] );
+				$edit_url = admin_url( 'admin.php?page=wp-smart-code-editor&id=' . $snippet['id'] );
 				$title = '<a href="' . esc_url( $edit_url ) . '">' . $title . '</a>';
 			}
 			$output .= '<strong class="ecs-snippet-title">' . $title . '</strong>';
@@ -252,7 +252,7 @@ class Shortcode {
 						'%1$d%2$ssnippet%3$s', 
 						'%1$d%2$ssnippets%3$s', 
 						$count, 
-						'edge-code-snippets' 
+						'code-snippet' 
 					),
 					$count,
 					$type_text,
@@ -266,7 +266,7 @@ class Shortcode {
 				
 				return sprintf(
 					/* translators: %d: total, %d: active, %d: inactive */
-					__( '%1$d total (%2$d active, %3$d inactive)', 'edge-code-snippets' ),
+					__( '%1$d total (%2$d active, %3$d inactive)', 'code-snippet' ),
 					$total,
 					$active,
 					$inactive

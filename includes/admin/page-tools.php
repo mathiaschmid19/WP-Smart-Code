@@ -26,8 +26,8 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['ta
 				<span class="ecs-logo-text">WP Smart Code</span>
 			</div>
 			<div class="ecs-header-actions">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets' ) ); ?>" class="button">
-					<?php esc_html_e( '← Back to Snippets', 'edge-code-snippets' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet' ) ); ?>" class="button">
+					<?php esc_html_e( '← Back to Snippets', 'code-snippet' ); ?>
 				</a>
 			</div>
 		</div>
@@ -36,9 +36,9 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['ta
 	<!-- Subheader with Page Title -->
 	<div class="ecs-subheader">
 		<div class="ecs-subheader-content">
-			<h2 class="ecs-page-title"><?php esc_html_e( 'Tools', 'edge-code-snippets' ); ?></h2>
+			<h2 class="ecs-page-title"><?php esc_html_e( 'Tools', 'code-snippet' ); ?></h2>
 			<p class="ecs-page-description">
-				<?php esc_html_e( 'Import, export, and manage your code snippets', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'Import, export, and manage your code snippets', 'code-snippet' ); ?>
 			</p>
 		</div>
 	</div>
@@ -47,21 +47,21 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['ta
 	<div class="ecs-content-wrapper">
 		<!-- Tab Navigation -->
 		<nav class="ecs-tab-navigation">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-tools&tab=import' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-tools&tab=import' ) ); ?>" 
 			   class="ecs-tab-link <?php echo 'import' === $active_tab ? 'active' : ''; ?>">
-				<?php esc_html_e( 'Import', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'Import', 'code-snippet' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-tools&tab=export' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-tools&tab=export' ) ); ?>" 
 			   class="ecs-tab-link <?php echo 'export' === $active_tab ? 'active' : ''; ?>">
-				<?php esc_html_e( 'Export', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'Export', 'code-snippet' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-tools&tab=ai' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-tools&tab=ai' ) ); ?>" 
 			   class="ecs-tab-link <?php echo 'ai' === $active_tab ? 'active' : ''; ?>">
-				<?php esc_html_e( 'AI Settings', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'AI Settings', 'code-snippet' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-tools&tab=system' ) ); ?>" 
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-tools&tab=system' ) ); ?>" 
 			   class="ecs-tab-link <?php echo 'system' === $active_tab ? 'active' : ''; ?>">
-				<?php esc_html_e( 'System Info', 'edge-code-snippets' ); ?>
+				<?php esc_html_e( 'System Info', 'code-snippet' ); ?>
 			</a>
 		</nav>
 

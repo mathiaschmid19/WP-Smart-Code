@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="ecs-tools-panel">
 	<div class="ecs-card ecs-tools-hero-card">
-		<h2 class="ecs-tools-hero-title"><?php esc_html_e( 'Import Snippets', 'edge-code-snippets' ); ?></h2>
+		<h2 class="ecs-tools-hero-title"><?php esc_html_e( 'Import Snippets', 'code-snippet' ); ?></h2>
 		<p class="ecs-tools-hero-description">
-			<?php esc_html_e( 'Import snippets from a JSON file exported from WP Smart Code or other snippet plugins.', 'edge-code-snippets' ); ?>
+			<?php esc_html_e( 'Import snippets from a JSON file exported from WP Smart Code or other snippet plugins.', 'code-snippet' ); ?>
 		</p>
 	</div>
 
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 		<div class="notice notice-success is-dismissible">
 			<p>
-				<strong><?php esc_html_e( 'Import Complete!', 'edge-code-snippets' ); ?></strong>
+				<strong><?php esc_html_e( 'Import Complete!', 'code-snippet' ); ?></strong>
 				<?php if ( 'unknown' !== $format ) : ?>
 					<span class="ecs-format-badge"><?php echo esc_html( \ECS\FormatAdapter::get_format_name( $format ) ); ?></span>
 				<?php endif; ?>
@@ -42,19 +42,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 				printf(
 					/* translators: 1: imported count, 2: total count, 3: skipped count, 4: errors count */
-					esc_html__( 'Successfully imported %1$d of %2$d snippets. Skipped: %3$d, Errors: %4$d', 'edge-code-snippets' ),
-					$imported,
-					$total,
-					$skipped,
-					$errors
+					esc_html__( 'Successfully imported %1$d of %2$d snippets. Skipped: %3$d, Errors: %4$d', 'code-snippet' ),
+					absint( $imported ),
+					absint( $total ),
+					absint( $skipped ),
+					absint( $errors )
 				);
 				?>
 			</p>
 			<?php if ( $import_results && ( ! empty( $import_results['errors'] ) || ! empty( $import_results['skipped'] ) ) ) : ?>
 				<details>
-					<summary><?php esc_html_e( 'View Details', 'edge-code-snippets' ); ?></summary>
+					<summary><?php esc_html_e( 'View Details', 'code-snippet' ); ?></summary>
 					<?php if ( ! empty( $import_results['skipped'] ) ) : ?>
-						<p><strong><?php esc_html_e( 'Skipped:', 'edge-code-snippets' ); ?></strong></p>
+						<p><strong><?php esc_html_e( 'Skipped:', 'code-snippet' ); ?></strong></p>
 						<ul>
 							<?php foreach ( $import_results['skipped'] as $message ) : ?>
 								<li><?php echo esc_html( $message ); ?></li>
@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</ul>
 					<?php endif; ?>
 					<?php if ( ! empty( $import_results['errors'] ) ) : ?>
-						<p><strong><?php esc_html_e( 'Errors:', 'edge-code-snippets' ); ?></strong></p>
+						<p><strong><?php esc_html_e( 'Errors:', 'code-snippet' ); ?></strong></p>
 						<ul>
 							<?php foreach ( $import_results['errors'] as $message ) : ?>
 								<li><?php echo esc_html( $message ); ?></li>
@@ -90,8 +90,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<label for="ecs-import-file" class="ecs-upload-label">
 						<div class="ecs-upload-icon">📁</div>
 						<div class="ecs-upload-text">
-							<span class="ecs-upload-title"><?php esc_html_e( 'Choose JSON File', 'edge-code-snippets' ); ?></span>
-							<span class="ecs-upload-hint"><?php esc_html_e( 'or drag and drop here', 'edge-code-snippets' ); ?></span>
+							<span class="ecs-upload-title"><?php esc_html_e( 'Choose JSON File', 'code-snippet' ); ?></span>
+							<span class="ecs-upload-hint"><?php esc_html_e( 'or drag and drop here', 'code-snippet' ); ?></span>
 						</div>
 						<input type="file" id="ecs-import-file" name="import_file" accept=".json,application/json" required class="ecs-file-input-hidden">
 					</label>
@@ -102,7 +102,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="ecs-options-section">
 					<h3 class="ecs-options-title">
 						<span class="ecs-icon">⚙️</span>
-						<?php esc_html_e( 'Import Options', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Import Options', 'code-snippet' ); ?>
 					</h3>
 					
 					<div class="ecs-options-grid">
@@ -111,8 +111,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<div class="ecs-option-content">
 								<div class="ecs-option-icon">🛡️</div>
 								<div class="ecs-option-text">
-									<strong class="ecs-option-title"><?php esc_html_e( 'Deactivate snippets on import', 'edge-code-snippets' ); ?></strong>
-									<span class="ecs-option-description"><?php esc_html_e( 'Recommended for safety. Review snippets before activating.', 'edge-code-snippets' ); ?></span>
+									<strong class="ecs-option-title"><?php esc_html_e( 'Deactivate snippets on import', 'code-snippet' ); ?></strong>
+									<span class="ecs-option-description"><?php esc_html_e( 'Recommended for safety. Review snippets before activating.', 'code-snippet' ); ?></span>
 								</div>
 							</div>
 						</label>
@@ -122,8 +122,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<div class="ecs-option-content">
 								<div class="ecs-option-icon">⏭️</div>
 								<div class="ecs-option-text">
-									<strong class="ecs-option-title"><?php esc_html_e( 'Skip existing snippets', 'edge-code-snippets' ); ?></strong>
-									<span class="ecs-option-description"><?php esc_html_e( 'Prevent importing snippets that already exist (based on slug).', 'edge-code-snippets' ); ?></span>
+									<strong class="ecs-option-title"><?php esc_html_e( 'Skip existing snippets', 'code-snippet' ); ?></strong>
+									<span class="ecs-option-description"><?php esc_html_e( 'Prevent importing snippets that already exist (based on slug).', 'code-snippet' ); ?></span>
 								</div>
 							</div>
 						</label>
@@ -133,8 +133,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<div class="ecs-option-content">
 								<div class="ecs-option-icon">⚠️</div>
 								<div class="ecs-option-text">
-									<strong class="ecs-option-title"><?php esc_html_e( 'Update existing snippets', 'edge-code-snippets' ); ?></strong>
-									<span class="ecs-option-description"><?php esc_html_e( 'Overwrite existing snippets. Local changes will be lost!', 'edge-code-snippets' ); ?></span>
+									<strong class="ecs-option-title"><?php esc_html_e( 'Update existing snippets', 'code-snippet' ); ?></strong>
+									<span class="ecs-option-description"><?php esc_html_e( 'Overwrite existing snippets. Local changes will be lost!', 'code-snippet' ); ?></span>
 								</div>
 							</div>
 						</label>
@@ -145,7 +145,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="ecs-form-actions">
 					<button type="submit" class="button button-primary button-hero">
 						<span class="ecs-button-icon">📥</span>
-						<?php esc_html_e( 'Import Snippets', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Import Snippets', 'code-snippet' ); ?>
 					</button>
 				</div>
 			</form>
@@ -158,23 +158,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="ecs-card ecs-info-card">
 			<div class="ecs-card-header-compact">
 				<span class="ecs-card-icon">🔄</span>
-				<h3 class="ecs-card-title-compact"><?php esc_html_e( 'Supported Formats', 'edge-code-snippets' ); ?></h3>
+				<h3 class="ecs-card-title-compact"><?php esc_html_e( 'Supported Formats', 'code-snippet' ); ?></h3>
 			</div>
 			<div class="ecs-card-content">
-				<p class="ecs-info-intro"><?php esc_html_e( 'We automatically detect and convert:', 'edge-code-snippets' ); ?></p>
+				<p class="ecs-info-intro"><?php esc_html_e( 'We automatically detect and convert:', 'code-snippet' ); ?></p>
 				<ul class="ecs-format-list">
 					<li class="ecs-format-item">
 						<span class="ecs-guideline-icon">✓</span>
-						<strong><?php esc_html_e( 'WP Smart Code', 'edge-code-snippets' ); ?></strong>
-						<span class="ecs-format-type"><?php esc_html_e( 'Native', 'edge-code-snippets' ); ?></span>
+						<strong><?php esc_html_e( 'WP Smart Code', 'code-snippet' ); ?></strong>
+						<span class="ecs-format-type"><?php esc_html_e( 'Native', 'code-snippet' ); ?></span>
 					</li>
 					<li class="ecs-format-item">
 						<span class="ecs-guideline-icon">✓</span>
-						<strong><?php esc_html_e( 'WPCode', 'edge-code-snippets' ); ?></strong>
+						<strong><?php esc_html_e( 'WPCode', 'code-snippet' ); ?></strong>
 					</li>
 					<li class="ecs-format-item">
 						<span class="ecs-guideline-icon">✓</span>
-						<strong><?php esc_html_e( 'Code Snippets', 'edge-code-snippets' ); ?></strong>
+						<strong><?php esc_html_e( 'Code Snippets', 'code-snippet' ); ?></strong>
 					</li>
 				</ul>
 			</div>
@@ -184,25 +184,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="ecs-card ecs-info-card">
 			<div class="ecs-card-header-compact">
 				<span class="ecs-card-icon">📋</span>
-				<h3 class="ecs-card-title-compact"><?php esc_html_e( 'Import Guidelines', 'edge-code-snippets' ); ?></h3>
+				<h3 class="ecs-card-title-compact"><?php esc_html_e( 'Import Guidelines', 'code-snippet' ); ?></h3>
 			</div>
 			<div class="ecs-card-content">
 				<ul class="ecs-guideline-list">
 					<li class="ecs-guideline-item ecs-guideline-success">
 						<span class="ecs-guideline-icon">✓</span>
-						<?php esc_html_e( 'Backup current snippets before importing', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Backup current snippets before importing', 'code-snippet' ); ?>
 					</li>
 					<li class="ecs-guideline-item ecs-guideline-success">
 						<span class="ecs-guideline-icon">✓</span>
-						<?php esc_html_e( 'Review code before activating snippets', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Review code before activating snippets', 'code-snippet' ); ?>
 					</li>
 					<li class="ecs-guideline-item ecs-guideline-success">
 						<span class="ecs-guideline-icon">✓</span>
-						<?php esc_html_e( 'Test in staging environment first', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Test in staging environment first', 'code-snippet' ); ?>
 					</li>
 					<li class="ecs-guideline-item ecs-guideline-warning">
 						<span class="ecs-guideline-icon">!</span>
-						<?php esc_html_e( 'Only import from trusted sources', 'edge-code-snippets' ); ?>
+						<?php esc_html_e( 'Only import from trusted sources', 'code-snippet' ); ?>
 					</li>
 				</ul>
 			</div>

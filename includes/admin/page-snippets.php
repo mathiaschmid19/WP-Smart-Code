@@ -5,9 +5,8 @@
  * @package ECS
  * @since 1.0.0
  *
- * @var array        $snippets List of snippets.
- * @var int          $total_count Total count of snippets.
- * @var Admin        $admin Admin class instance.
+ * @var Admin                $admin Admin class instance.
+ * @var Snippets_List_Table  $list_table List table instance.
  */
 
 // Exit if accessed directly.
@@ -16,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<div class="wrap ecs-admin-page">
+<div class="wrap ecs-snippets-page">
 	<!-- Fixed Header with Logo -->
 	<div class="ecs-page-header">
 		<div class="ecs-header-content">
@@ -25,297 +24,82 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<span class="ecs-logo-text">WP Smart Code</span>
 			</div>
 			<div class="ecs-header-actions">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-editor' ) ); ?>" class="button button-primary">
-					<?php esc_html_e( '+ Add New Snippet', 'edge-code-snippets' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-tools' ) ); ?>" class="button button-secondary button-large">
+					<span class="dashicons dashicons-admin-tools"></span>
+					<?php esc_html_e( 'Tools', 'code-snippet' ); ?>
+				</a>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-smart-code-editor' ) ); ?>" class="button button-primary button-large">
+					<span class="dashicons dashicons-plus-alt"></span>
+					<?php esc_html_e( 'Add New Snippet', 'code-snippet' ); ?>
 				</a>
 			</div>
 		</div>
 	</div>
 
-	<!-- Subheader with Page Title -->
-	<div class="ecs-subheader">
-		<div class="ecs-subheader-content">
-			<h2 class="ecs-page-title"><?php esc_html_e( 'Code Snippets', 'edge-code-snippets' ); ?></h2>
-			<p class="ecs-page-description">
-				<?php
-					if ( $total_count > 0 ) {
-						printf(
-							// translators: %d is the number of snippets.
-							esc_html( _n( 'You have %d snippet', 'You have %d snippets', $total_count, 'edge-code-snippets' ) ),
-							intval( $total_count )
-						);
-					} else {
-						esc_html_e( 'Get started by creating your first code snippet', 'edge-code-snippets' );
-					}
-				?>
-			</p>
-		</div>
-	</div>
-
-	<!-- Content Wrapper -->
-	<div class="ecs-content-wrapper">
-
-	<!-- Tab Navigation -->
-	<div class="ecs-tab-navigation">
-		<ul class="ecs-tab-list">
-			<li class="ecs-tab-item <?php echo ( $current_tab === 'all' ) ? 'ecs-tab-active' : ''; ?>">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets&tab=all' ) ); ?>" class="ecs-tab-link">
-					<?php esc_html_e( 'All', 'edge-code-snippets' ); ?>
-					<span class="ecs-tab-count">(<?php echo intval( $tab_counts['all'] ); ?>)</span>
-				</a>
-			</li>
-			<li class="ecs-tab-item <?php echo ( $current_tab === 'active' ) ? 'ecs-tab-active' : ''; ?>">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets&tab=active' ) ); ?>" class="ecs-tab-link">
-					<?php esc_html_e( 'Active', 'edge-code-snippets' ); ?>
-					<span class="ecs-tab-count">(<?php echo intval( $tab_counts['active'] ); ?>)</span>
-				</a>
-			</li>
-			<li class="ecs-tab-item <?php echo ( $current_tab === 'inactive' ) ? 'ecs-tab-active' : ''; ?>">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets&tab=inactive' ) ); ?>" class="ecs-tab-link">
-					<?php esc_html_e( 'Inactive', 'edge-code-snippets' ); ?>
-					<span class="ecs-tab-count">(<?php echo intval( $tab_counts['inactive'] ); ?>)</span>
-				</a>
-			</li>
-			<li class="ecs-tab-item <?php echo ( $current_tab === 'trash' ) ? 'ecs-tab-active' : ''; ?>">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets&tab=trash' ) ); ?>" class="ecs-tab-link">
-					<?php esc_html_e( 'Trash', 'edge-code-snippets' ); ?>
-					<span class="ecs-tab-count">(<?php echo intval( $tab_counts['trash'] ); ?>)</span>
-				</a>
-			</li>
-		</ul>
-	</div>
-
-	<!-- Snippets Table -->
-	<table class="widefat striped ecs-snippets-table">
-		<thead>
-			<tr>
-				<th class="column-title"><?php esc_html_e( 'Title', 'edge-code-snippets' ); ?></th>
-				<th class="column-slug"><?php esc_html_e( 'Slug', 'edge-code-snippets' ); ?></th>
-				<th class="column-type"><?php esc_html_e( 'Type', 'edge-code-snippets' ); ?></th>
-				<th class="column-mode"><?php esc_html_e( 'Mode', 'edge-code-snippets' ); ?></th>
-				<th class="column-status"><?php esc_html_e( 'Status', 'edge-code-snippets' ); ?></th>
-				<th class="column-author"><?php esc_html_e( 'Author', 'edge-code-snippets' ); ?></th>
-				<th class="column-actions"><?php esc_html_e( 'Actions', 'edge-code-snippets' ); ?></th>
-			</tr>
-		</thead>
-		<tbody>
+	<!-- Type Filter Tabs -->
+	<div class="ecs-type-tabs">
+		<div class="ecs-type-tabs-wrapper">
 			<?php
-			if ( ! empty( $snippets ) ) {
-				foreach ( $snippets as $snippet ) {
-					$author = get_user_by( 'ID', intval( $snippet['author_id'] ) );
-					$author_name = $author ? $author->display_name : __( 'Unknown', 'edge-code-snippets' );
-					$status_class = intval( $snippet['active'] ) ? 'status-active' : 'status-inactive';
-					$status_text = intval( $snippet['active'] ) ? __( 'Active', 'edge-code-snippets' ) : __( 'Inactive', 'edge-code-snippets' );
-					$type_label = $admin->get_type_label( $snippet['type'] );
-					?>
-					<tr class="ecs-snippet-row" data-snippet-id="<?php echo intval( $snippet['id'] ); ?>">
-						<td class="column-title">
-							<strong><?php echo esc_html( $snippet['title'] ); ?></strong>
-						</td>
-						<td class="column-slug">
-							<code><?php echo esc_html( $snippet['slug'] ); ?></code>
-						</td>
-						<td class="column-type">
-							<span class="badge badge-<?php echo esc_attr( $snippet['type'] ); ?>">
-								<?php echo esc_html( $type_label ); ?>
-							</span>
-						</td>
-						<td class="column-mode">
-							<?php
-							$mode = $snippet['mode'] ?? 'auto_insert';
-							$mode_label = $mode === 'shortcode' ? __( 'Shortcode', 'edge-code-snippets' ) : __( 'Auto Insert', 'edge-code-snippets' );
-							$mode_class = $mode === 'shortcode' ? 'mode-shortcode' : 'mode-auto-insert';
-							?>
-							<span class="badge <?php echo esc_attr( $mode_class ); ?>">
-								<?php echo esc_html( $mode_label ); ?>
-							</span>
-						</td>
-						<td class="column-status">
-							<span class="badge <?php echo esc_attr( $status_class ); ?>">
-								<?php echo esc_html( $status_text ); ?>
-							</span>
-						</td>
-						<td class="column-author">
-							<?php echo esc_html( $author_name ); ?>
-						</td>
-						<td class="column-actions">
-							<div class="ecs-action-buttons">
-								<label class="ecs-toggle-switch">
-									<input type="checkbox" 
-										   class="ecs-toggle-input" 
-										   data-snippet-id="<?php echo intval( $snippet['id'] ); ?>"
-										   <?php checked( intval( $snippet['active'] ), 1 ); ?>>
-									<span class="ecs-toggle-slider"></span>
-								</label>
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=edge-code-snippets-editor&snippet_id=' . intval( $snippet['id'] ) ) ); ?>" class="button button-small ecs-btn-edit">
-									<?php esc_html_e( 'Edit', 'edge-code-snippets' ); ?>
-								</a>
-								<a href="#" class="button button-small button-link-delete ecs-btn-delete" data-snippet-id="<?php echo intval( $snippet['id'] ); ?>">
-									<?php esc_html_e( 'Delete', 'edge-code-snippets' ); ?>
-								</a>
-							</div>
-						</td>
-					</tr>
-					<?php
-				}
-			} else {
-				?>
-				<tr>
-					<td colspan="7" class="ecs-no-snippets" style="text-align: center; padding: 40px 20px;">
-						<div style="color: #666;">
-							<span class="dashicons dashicons-editor-code" style="font-size: 48px; width: 48px; height: 48px; opacity: 0.3;"></span>
-							<p style="margin: 10px 0 5px 0; font-size: 16px;"><?php esc_html_e( 'No snippets yet', 'edge-code-snippets' ); ?></p>
-							<p style="margin: 0; font-size: 14px; color: #999;"><?php esc_html_e( 'Create your first snippet to get started', 'edge-code-snippets' ); ?></p>
-						</div>
-					</td>
-				</tr>
-				<?php
-			}
+			$current_type = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$snippet_model = $admin->get_snippet();
+			
+			// Get counts for each type
+			$all_count = $snippet_model->count( [ 'deleted' => 0 ] );
+			$php_count = $snippet_model->count( [ 'type' => 'php', 'deleted' => 0 ] );
+			$js_count = $snippet_model->count( [ 'type' => 'js', 'deleted' => 0 ] );
+			$css_count = $snippet_model->count( [ 'type' => 'css', 'deleted' => 0 ] );
+			$html_count = $snippet_model->count( [ 'type' => 'html', 'deleted' => 0 ] );
 			?>
-		</tbody>
-	</table>
-
-	<!-- Footer -->
-	<div class="ecs-admin-footer">
-		<p class="description">
-			<?php
-			esc_html_e(
-				'Manage your code snippets here. You can add, edit, and delete snippets to customize your WordPress site.',
-				'edge-code-snippets'
-			);
-			?>
-		</p>
-	</div>
-</div>
-
-<!-- Add/Edit Snippet Modal -->
-<div id="ecs-snippet-modal" class="ecs-modal" style="display: none;">
-	<div class="ecs-modal-content">
-		<div class="ecs-modal-header">
-			<h2 id="ecs-modal-title"><?php esc_html_e( 'Add New Snippet', 'edge-code-snippets' ); ?></h2>
-			<button type="button" class="ecs-modal-close" id="ecs-modal-close">
-				<span class="dashicons dashicons-no-alt"></span>
-			</button>
-		</div>
-		<div class="ecs-modal-body">
-			<form id="ecs-snippet-form">
-				<input type="hidden" id="ecs-snippet-id" name="id" value="">
-				
-				<div class="ecs-form-row">
-					<label for="ecs-snippet-title">
-						<?php esc_html_e( 'Snippet Title', 'edge-code-snippets' ); ?>
-						<span class="required">*</span>
-					</label>
-					<input type="text" id="ecs-snippet-title" name="title" class="widefat" required>
-				</div>
-
-				<div class="ecs-form-row">
-					<label for="ecs-snippet-slug">
-						<?php esc_html_e( 'Slug', 'edge-code-snippets' ); ?>
-					</label>
-					<input type="text" id="ecs-snippet-slug" name="slug" class="widefat">
-					<p class="description"><?php esc_html_e( 'Leave empty to auto-generate from title', 'edge-code-snippets' ); ?></p>
-				</div>
-
-				<div class="ecs-form-row">
-					<label for="ecs-snippet-type">
-						<?php esc_html_e( 'Snippet Type', 'edge-code-snippets' ); ?>
-						<span class="required">*</span>
-					</label>
-					<select id="ecs-snippet-type" name="type" class="widefat" required>
-						<option value=""><?php esc_html_e( 'Select Type...', 'edge-code-snippets' ); ?></option>
-						<option value="php">PHP</option>
-						<option value="js">JavaScript</option>
-						<option value="css">CSS</option>
-						<option value="html">HTML</option>
-					</select>
-				</div>
-
-				<div class="ecs-form-row">
-					<label for="ecs-snippet-code">
-						<?php esc_html_e( 'Code', 'edge-code-snippets' ); ?>
-						<span class="required">*</span>
-					</label>
-					<textarea id="ecs-snippet-code" name="code" rows="15" class="widefat code" required></textarea>
-					<p class="description"><?php esc_html_e( 'Enter your code snippet here', 'edge-code-snippets' ); ?></p>
-				</div>
-
-				<div class="ecs-form-row">
-					<label>
-						<input type="checkbox" id="ecs-snippet-active" name="active" value="1">
-						<?php esc_html_e( 'Active (snippet will execute when saved)', 'edge-code-snippets' ); ?>
-					</label>
-				</div>
-			</form>
-		</div>
-		<div class="ecs-modal-footer">
-			<button type="button" class="button" id="ecs-modal-cancel">
-				<?php esc_html_e( 'Cancel', 'edge-code-snippets' ); ?>
-			</button>
-			<button type="button" class="button button-primary" id="ecs-save-snippet">
-				<?php esc_html_e( 'Save Snippet', 'edge-code-snippets' ); ?>
-			</button>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet' ) ); ?>" 
+			   class="ecs-type-tab <?php echo empty( $current_type ) ? 'active' : ''; ?>">
+				<?php esc_html_e( 'All Snippets', 'code-snippet' ); ?>
+			</a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet&type=php' ) ); ?>" 
+			   class="ecs-type-tab <?php echo 'php' === $current_type ? 'active' : ''; ?>">
+				<?php esc_html_e( 'PHP', 'code-snippet' ); ?>
+			</a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet&type=js' ) ); ?>" 
+			   class="ecs-type-tab <?php echo 'js' === $current_type ? 'active' : ''; ?>">
+				<?php esc_html_e( 'JavaScript', 'code-snippet' ); ?>
+			</a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet&type=css' ) ); ?>" 
+			   class="ecs-type-tab <?php echo 'css' === $current_type ? 'active' : ''; ?>">
+				<?php esc_html_e( 'CSS', 'code-snippet' ); ?>
+			</a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=code-snippet&type=html' ) ); ?>" 
+			   class="ecs-type-tab <?php echo 'html' === $current_type ? 'active' : ''; ?>">
+				<?php esc_html_e( 'HTML', 'code-snippet' ); ?>
+			</a>
 		</div>
 	</div>
-</div>
 
-	</div><!-- .ecs-content-wrapper -->
-</div><!-- .ecs-admin-page -->
+	<!-- Page Content -->
+	<div class="ecs-page-content">
 
-<!-- Loading Overlay -->
-<div id="ecs-loading-overlay" style="display: none;">
-	<div class="ecs-loading-spinner">
-		<span class="spinner is-active"></span>
-	</div>
-</div>
+	<?php
+	// Display admin notices
+	settings_errors( 'ecs_messages' );
 
-<script>
-jQuery(document).ready(function($) {
-	// Handle toggle switch changes
-	$('.ecs-toggle-input').on('change', function() {
-		const $toggle = $(this);
-		const snippetId = $toggle.data('snippet-id');
-		const isActive = $toggle.is(':checked');
-		
-		// Disable toggle during request
-		$toggle.prop('disabled', true);
-		
-		// Make AJAX request to toggle snippet status
-		$.ajax({
-			url: ajaxurl,
-			method: 'POST',
-			data: {
-				action: 'ecs_toggle_snippet',
-				snippet_id: snippetId,
-				active: isActive ? 1 : 0,
-				nonce: ecsAdmin.nonce
-			},
-			success: function(response) {
-				if (response.success) {
-					// Update status badge
-					const $statusBadge = $toggle.closest('tr').find('.ecs-status-badge');
-					if (isActive) {
-						$statusBadge.removeClass('ecs-status-inactive').addClass('ecs-status-active').text('Active');
-					} else {
-						$statusBadge.removeClass('ecs-status-active').addClass('ecs-status-inactive').text('Inactive');
-					}
-				} else {
-					// Revert toggle on error
-					$toggle.prop('checked', !isActive);
-					alert('Error: ' + (response.data || 'Failed to update snippet status'));
-				}
-			},
-			error: function() {
-				// Revert toggle on error
-				$toggle.prop('checked', !isActive);
-				alert('Error: Failed to update snippet status');
-			},
-			complete: function() {
-				// Re-enable toggle
-				$toggle.prop('disabled', false);
-			}
-		});
-	});
+	// Fire action hook before snippets list
+	do_action( 'ecs_before_snippets_list' );
+	?>
 
-});
-</script>
+	<form method="get">
+		<input type="hidden" name="page" value="wp-smart-code">
+		<?php
+		if ( isset( $list_table ) && is_object( $list_table ) ) {
+			$list_table->views();
+			$list_table->search_box( __( 'Search Snippets', 'code-snippet' ), 'snippet' );
+			$list_table->display();
+		}
+		?>
+	</form>
+
+	<?php
+	// Fire action hook after snippets list
+	do_action( 'ecs_after_snippets_list' );
+	?>
+	</div><!-- .ecs-page-content -->
+</div><!-- .ecs-snippets-page -->
+
+

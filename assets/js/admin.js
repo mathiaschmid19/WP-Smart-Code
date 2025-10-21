@@ -16,7 +16,47 @@
      */
     init: function () {
       this.attachEventListeners();
+      this.handleEditorNotices();
       this.logReady();
+    },
+
+    /**
+     * Handle editor success notices
+     */
+    handleEditorNotices: function () {
+      const $notice = $(".ecs-editor-notice");
+
+      if ($notice.length) {
+        // Handle dismiss button
+        $notice.find(".notice-dismiss").on("click", function () {
+          $notice.addClass("fade-out");
+          setTimeout(function () {
+            $notice.remove();
+            // Remove message parameter from URL
+            if (window.history && window.history.replaceState) {
+              const url = new URL(window.location);
+              url.searchParams.delete("message");
+              window.history.replaceState({}, "", url);
+            }
+          }, 300);
+        });
+
+        // Auto-hide after 5 seconds
+        setTimeout(function () {
+          if ($notice.length && !$notice.hasClass("fade-out")) {
+            $notice.addClass("fade-out");
+            setTimeout(function () {
+              $notice.remove();
+              // Remove message parameter from URL
+              if (window.history && window.history.replaceState) {
+                const url = new URL(window.location);
+                url.searchParams.delete("message");
+                window.history.replaceState({}, "", url);
+              }
+            }, 300);
+          }
+        }, 5000);
+      }
     },
 
     /**
